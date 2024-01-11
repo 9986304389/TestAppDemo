@@ -43,8 +43,10 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+
         <Box
           sx={{
             marginTop: 8,
@@ -53,74 +55,78 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <GroupAddIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Add Member
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sx={{borderColor:"red"}}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="Name"
-                  autoFocus
-                
-                />
+          
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <GroupAddIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Add Member
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{ borderColor: "red" }}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="Name"
+                    autoFocus
+
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="PhoneNumber"
+                    label="Phone Number"
+                    type="PhoneNumber"
+                    id="PhoneNumber"
+                    autoComplete="new-PhoneNumber"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+
+                </Grid>
               </Grid>
-              
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="PhoneNumber"
-                  label="Phone Number"
-                  type="PhoneNumber"
-                  id="PhoneNumber"
-                  autoComplete="new-PhoneNumber"
-                />
-              </Grid>
-              <Grid item xs={12}>
-              
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 3,
-                mb: 2,
-                bgcolor: 'secondary.main',
-                '&:hover': {
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 3,
+                  mb: 2,
                   bgcolor: 'secondary.main',
-                },
-              }}
-            >
-              ADD
-            </Button>
-            <Grid container justifyContent="flex-end">
-             
-            </Grid>
-          </Box>
+                  '&:hover': {
+                    bgcolor: 'secondary.main',
+                  },
+                }}
+              >
+                ADD
+              </Button>
+              <Grid container justifyContent="flex-end">
+
+              </Grid>
+            </Box>
+          
+           
         </Box>
         
       </Container>
+
     </ThemeProvider>
   );
 }
