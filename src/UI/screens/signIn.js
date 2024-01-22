@@ -17,7 +17,8 @@ import SignUp from '../screens/signUp';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
-
+import img from '../NLF-web-Logo-1.png'
+import '../../App.css';
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -135,7 +136,23 @@ export default function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <div className="header">
+
+                <div className="left">
+                    <img className="NLF_logo" src={img} alt="Avatar" />
+                    <h1 className='MainHeading'>New Life Fellowship</h1>
+
+                </div>
+                <div className="right">
+                    <Link sx={{ marginRight: 5 }} href="#" variant="body2" onClick={handleClick}>
+                        {"Sign Up"}
+                    </Link>
+                </div>
+
+
+            </div>
             <Container component="main" maxWidth="xs">
+
                 <CssBaseline />
                 <Box
                     sx={{
