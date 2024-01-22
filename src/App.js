@@ -7,12 +7,12 @@ import SignIn from './UI/screens/signIn';
 import Signup from './UI/screens/signUp';
 import MainPage from '../src/UI/screens/MainPage';
 import Dashbaord from '../src/UI/screens/Dashbaord';
+
+
 // App.js
-
-
-
 const App = () => {
   return (
+  
     <Router>
 
       <Routes>
@@ -23,6 +23,7 @@ const App = () => {
       </Routes>
 
     </Router>
+  
   );
 };
 

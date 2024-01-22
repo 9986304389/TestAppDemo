@@ -136,31 +136,19 @@ export default function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {/* <div className="header">
 
-                <div className="left">
-                    <img className="NLF_logo" src={img} alt="Avatar" />
-                    <h1 className='MainHeading'>New Life Fellowship</h1>
-
-                </div>
-                <div className="right">
-                    <Link sx={{ marginRight: 5 }} href="#" variant="body2" onClick={handleClick}>
-                        {"Sign Up"}
-                    </Link>
-                </div>
-                
-
-
-            </div> */}
             <div className="header">
                 <div className="left">
-                    {/* <Personavatar receivedData={receivedData} /> */}
+                    <img className="NLF_logo" src={img} alt="Avatar" />
                 </div>
                 <div className="center">
-                    <h1>New Life Fellowship</h1>
+                    <h1 style={{fontFamily:"'Roboto','Helvetica','Arial',sans-serif",fontWeight:600}}>New Life Fellowship</h1>
                 </div>
                 <div className="right">
-                    <img className="NLF_logo" src={img} alt="Avatar" />
+                    <Link href="#" variant="body2" onClick={handleClick} style={{ whiteSpace: 'nowrap', margin: 4, fontSize: 18, textDecoration: 'none', color: 'black' }}>
+                        {"Sign Up"}
+                    </Link>
+
                 </div>
 
             </div>
@@ -217,19 +205,25 @@ export default function SignIn() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                bgcolor: 'secondary.main',
+                                '&:hover': {
+                                    bgcolor: 'secondary.main' // Replace 'hoverColor' with the color you want on hover
+                                }
+                            }}
                         >
-                            Sign In
+                            Login In
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link href="#" variant="body2" style={{ textDecoration: 'none', color: 'black' }}>
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2" onClick={handleClick}>
+                                <Link href="#" variant="body2" onClick={handleClick} style={{ textDecoration: 'none', color: 'black' }}>
                                     {"Don't have an account? Sign Up"}
                                 </Link>
 

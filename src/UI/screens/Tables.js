@@ -130,24 +130,45 @@ export default function Orders(props) {
   };
 
   const [searchTerm, setSearchTerm] = useState('');
-
   const [nameSearch, setNameSearch] = useState('');
   const [emailSearch, setEmailSearch] = useState('');
   const [infoSearch, setInfoSearch] = useState('');
 
   const filterData = () => {
-    return data.filter(
-      (row) =>
+    return data.map((row) => {
+      const filteredReadInformation = (row.readinformation || []).filter(
+        (info) =>
+          info &&
+          info.day &&
+          info.date &&
+          info.information &&
+          typeof info.day === 'string' &&
+          typeof info.date === 'string' &&
+          typeof info.information === 'string' &&
+          info.day.toLowerCase().trim().includes(infoSearch.toLowerCase().trim()) ||
+          info.date.toLowerCase().trim().includes(infoSearch.toLowerCase().trim())||
+          info.information.toLowerCase().trim().includes(infoSearch.toLowerCase().trim())
+      );
+
+      // Check both conditions for filtering based on name and email
+      if (
         row.name.toLowerCase().includes(nameSearch.toLowerCase()) &&
-        row.email.toLowerCase().includes(emailSearch.toLowerCase()) &&
-        row.readinformation.some(
-          (info) =>
-            info.day.toLowerCase().includes(infoSearch.toLowerCase()) ||
-            info.date.toLowerCase().includes(infoSearch.toLowerCase()) ||
-            info.information.toLowerCase().includes(infoSearch.toLowerCase())
-        )
-    );
+        row.email.toLowerCase().includes(emailSearch.toLowerCase())
+      ) {
+        return {
+          ...row,
+          readinformation: filteredReadInformation,
+        };
+      } else {
+        // If the name or email does not match, return null or an empty object
+        // depending on your use case
+        return null; // or return {} or return undefined, based on your preference
+      }
+    })
+      // Filter out the elements that didn't match the name and email conditions
+      .filter(Boolean); // This will remove null or undefined elements from the array
   };
+
 
   const filteredData = filterData();
 
@@ -180,16 +201,6 @@ export default function Orders(props) {
               style={{ marginBottom: '16px', margin: 8 }}
 
             />
-            {/* <InputBase
-          placeholder="Search by Name"
-          value={nameSearch}
-          onChange={(e) => setNameSearch(e.target.value)}
-        /> */}
-            {/* <InputBase
-          placeholder="Search by Email"
-          value={emailSearch}
-          onChange={(e) => setEmailSearch(e.target.value)}
-        /> */}
             <TextField
               label="Search by Email"
               variant="outlined"
@@ -198,26 +209,21 @@ export default function Orders(props) {
               onChange={(e) => setEmailSearch(e.target.value)}
               style={{ marginBottom: '16px', margin: 8 }}
             />
+            <TextField
+              label="Search in Read Information"
+              variant="outlined"
+              value={infoSearch}
+              onChange={(e) => setInfoSearch(e.target.value)}
+              style={{ marginBottom: '16px', margin: 8 }}
+            />
           </div>
           <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Read Information</TableCell>
                 <TableCell colSpan={3}>
-                  {/* <InputBase
-                placeholder="Search in Read Information"
-                value={infoSearch}
-                onChange={(e) => setInfoSearch(e.target.value)}
-              /> */}
-                  <TextField
-                    label="Search in Read Information"
-                    variant="outlined"
-
-                    value={infoSearch}
-                    onChange={(e) => setInfoSearch(e.target.value)}
-                    style={{ marginBottom: '16px', margin: 8 }}
-                  />
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -236,8 +242,8 @@ export default function Orders(props) {
                               <TableCell>Date</TableCell>
                               <TableCell>Information</TableCell>
                               <TableCell>Status</TableCell>
-                              <TableCell>Edit</TableCell>
-                              <TableCell>Delete</TableCell>
+                              {/* <TableCell>Edit</TableCell>
+                              <TableCell>Delete</TableCell> */}
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -255,7 +261,7 @@ export default function Orders(props) {
                                     {info.status === 1 ? 'Done' : 'Not Done'}
                                   </span>
                                 </TableCell>
-                                <TableCell>
+                                {/* <TableCell>
                                   <Tooltip title="Edit">
                                     <IconButton
                                       color="success"
@@ -276,7 +282,7 @@ export default function Orders(props) {
                                       <DeleteIcon />
                                     </IconButton>
                                   </Tooltip>
-                                </TableCell>
+                                </TableCell> */}
                               </TableRow>
                             ))}
                           </TableBody>

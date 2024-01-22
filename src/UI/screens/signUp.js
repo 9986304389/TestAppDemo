@@ -18,6 +18,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorIcon from '@mui/icons-material/Error';
+import '../../App.css';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -135,8 +136,16 @@ export default function SignUp() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+
+            <div className="right">
+                <Link href="#" variant="body2" onClick={Navmainpage} style={{ whiteSpace: 'nowrap', margin: 20, fontSize: 18,textDecoration: 'none', color: 'black' }}>
+                    {"Sign In"}
+                </Link>
+
+            </div>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+
                 <Box
                     sx={{
                         marginTop: 8,
@@ -212,7 +221,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2" onClick={Navmainpage}>
+                                <Link href="#" variant="body2" onClick={Navmainpage} style={{ textDecoration: 'none', color: 'black' }}>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
