@@ -11,7 +11,7 @@ export default function CheckboxesGroup(props) {
     const { sendDataToParents } = props;
 
     const [state, setState] = React.useState({
-        gilad: true,
+        gilad: false,
     });
 
     const handleChange = (event) => {

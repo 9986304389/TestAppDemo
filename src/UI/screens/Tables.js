@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,83 +7,287 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
+import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import TextField from '@mui/material/TextField';
+import DoneIcon from '@mui/icons-material/Done';
+import ClearIcon from '@mui/icons-material/Clear';
 export default function Orders(props) {
+  const [data, setData] = useState([]);
+  const [admin,setadmin]=useState([]);
+  //get the readinformation data 
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [alertConfig, setAlertConfig] = useState({
+    show: false,
+    message: '',
+    severity: 'success',
+  });
+  const navigate = useNavigate();
+
+  const { receivedData } = props;
+  console.log(receivedData)
+  
+  let isAdmin = receivedData == 'admin@gmail.com';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let email = receivedData;
+      const data_json = { email: email };
+
+      try {
+        const response = await fetch('https://chbackend.vercel.app/api/view_form_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data_json),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+
+          if (result.status) {
+
+          } else {
+            // Set failure alert config
+            setAlertConfig({
+              show: true,
+              message: result.message,
+              severity: 'error',
+            });
+            setTimeout(() => {
+              setAlertConfig({
+                show: false,
+                message: '',
+                severity: 'success',
+              });
+            }, 3000);
+          }
+
+          // Assuming result.rows is an array of objects
+          if (result.result) {
+            const formattedResult = result.result.map(item => {
+              const readInformationArray = item.readinformation.map(info => JSON.parse(info));
+              return { ...item, readinformation: readInformationArray };
+            });
+
+            setData(formattedResult);
+
+          } else {
+            setData([]);
+          }
+        } else {
+          console.error('Failed to fetch data');
+
+          // Set failure alert config
+          setAlertConfig({
+            show: true,
+            message: 'API call failed!',
+            severity: 'error',
+          });
+          setTimeout(() => {
+            setAlertConfig({
+              show: false,
+              message: '',
+              severity: 'success',
+            });
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+
+        // Set error alert config
+        setAlertConfig({
+          show: true,
+          message: 'An error occurred!',
+          severity: 'error',
+        });
+        setTimeout(() => {
+          setAlertConfig({
+            show: false,
+            message: '',
+            severity: 'success',
+          });
+        }, 3000);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleButtonClick = (rowData) => {
+    // Handle the click event to capture the data from the selected row
+    console.log('Selected Row Data:', rowData);
+    setSelectedRowData(rowData);
+  };
+
+  const [searchTerm, setSearchTerm] = useState('');
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-      {props.children}
-    </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+        {props.children}
+      </Typography>
+      <Typography component="h1" variant="h5" m={2}>
+        {data.map((row) => (
+          <React.Fragment key={row.id}>
+            {row.name}
+          </React.Fragment>
+        ))}
+      </Typography>
+      <TextField
+        label="Search by Month"
+        variant="outlined"
+        fullWidth
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '16px' }}
+      />
+      {console.log(isAdmin)}
+      {isAdmin ? (<div style={{ overflowX: 'auto' }}>
+        {/* Render admin table */}
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontSize: 20 }}>Admin Table</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more orders
-      </Link>
+          </TableHead>
+          {/* ... rest of the admin table code ... */}
+        </Table>
+      </div>) : (
+        <div style={{ overflowX: 'auto' }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontSize: 20 }}>Read Information</TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Edit</TableCell>
+                <TableCell>Delete</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row) => (
+                <React.Fragment key={row.id}>
+                  {row.readinformation
+                    .filter((info) =>
+                      info.date.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((info, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{info.day}</TableCell>
+                        <TableCell>{info.date}</TableCell>
+                        <TableCell>{info.information}</TableCell>
+                        <TableCell>
+                          <span
+                            style={{
+                              color: info.status === 1 ? 'green' : 'red',
+                            }}
+                          >
+                            {info.status === 1 ? 'Done' : 'Not Done'}
+                          </span>
+
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              color="success"
+                              aria-label="edit"
+                              onClick={() => handleButtonClick(row)}
+                            >
+                              <ModeEditIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              color="error"
+                              aria-label="delete"
+                              onClick={() => handleButtonClick(row)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </React.Fragment>
   );
+
+  //   <React.Fragment>
+  //     <Typography component="h2" variant="h6" color="primary" gutterBottom>
+  //       {props.children}
+  //     </Typography>
+  //     <Typography component="h1" variant="h5" m={2}>
+  //       {data.map((row) => (
+  //         <React.Fragment key={row.id}>
+  //           {row.name}
+  //         </React.Fragment>
+  //       ))}
+  //     </Typography>
+  //     <div style={{ overflowX: 'auto' }}>
+  //     <Table  size="small">
+  //       <TableHead>
+  //         <TableRow>
+  //           {/* <TableCell>Name</TableCell>
+  //           <TableCell>Email</TableCell> */}
+  //           <TableCell sx={{fontSize:20}}>Read Information</TableCell>
+  //           <TableCell></TableCell>
+  //           <TableCell></TableCell>
+  //           <TableCell></TableCell>
+  //           <TableCell></TableCell>
+  //         </TableRow>
+  //       </TableHead>
+  //       <TableBody>
+  //         {data.map((row) => (
+  //           <React.Fragment key={row.id}>
+  //             {/* <TableRow>
+  //               <TableCell>{row.name}</TableCell>
+  //               <TableCell>{row.email}</TableCell>
+
+  //             </TableRow> */}
+  //             {row.readinformation.map((info, index) => (
+  //               <TableRow key={index}>
+  //                 <TableCell>{info.day}</TableCell>
+  //                 <TableCell>{info.date}</TableCell>
+  //                 <TableCell>{info.information}</TableCell>
+  //                 <TableCell>
+  //                   <Tooltip title="Edit">
+  //                     <IconButton color='success' aria-label="add an alarm" onClick={() => handleButtonClick(row)}>
+  //                       <ModeEditIcon />
+  //                     </IconButton>
+  //                   </Tooltip>
+  //                 </TableCell>
+  //                 <TableCell>
+  //                   <Tooltip title="Delete">
+  //                     <IconButton color="error" aria-label="add an alarm" onClick={() => handleButtonClick(row)}>
+  //                       <DeleteIcon />
+  //                     </IconButton>
+  //                   </Tooltip>
+  //                 </TableCell>
+  //               </TableRow>
+  //             ))}
+  //           </React.Fragment>
+  //         ))}
+  //       </TableBody>
+  //     </Table>
+  //     </div>
+  //   </React.Fragment>
+  // );
 }

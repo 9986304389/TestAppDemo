@@ -71,12 +71,12 @@ export default function SignIn() {
             if (response.ok) {
 
                 const result = await response.json();
-                console.log(result);
+                console.log(result.result[0]);
                 if (result.status) {
 
                     // Set success alert config
                     //navigate('/mainpage');
-                    navigate('/DashbaordPage', { state: { data: email } });
+                    navigate('/DashbaordPage', { state: { data: result.result[0].databaseemail, name: result.result[0].name } });
 
                 }
                 else {

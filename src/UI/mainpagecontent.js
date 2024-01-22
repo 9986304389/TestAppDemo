@@ -37,7 +37,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function SignUp(props) {
 
   const [selectStudy, setselectStudy] = React.useState('');
   const [completestatus, setcompletestatus] = React.useState('');
@@ -57,6 +57,11 @@ export default function SignUp() {
     setcompletestatus(data);
   };
 
+  const { receivedData } = props;
+  let email = receivedData.email.data;
+  let name = receivedData.email.name;
+ 
+  const firstLetter = receivedData.eamil ? receivedData.eamil.data.charAt(0).toUpperCase() : '';
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -186,22 +191,23 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-           {alertConfig.show && (
-                        <Stack sx={{ width: '100%' }} spacing={2}>
-                            {console.log(alertConfig.severity)}
-                            <Alert severity={alertConfig.severity}>{alertConfig.message}</Alert>
-                        </Stack>
-                    )}
+          {alertConfig.show && (
+            <Stack sx={{ width: '100%' }} spacing={2}>
+              {console.log(alertConfig.severity)}
+              <Alert severity={alertConfig.severity}>{alertConfig.message}</Alert>
+            </Stack>
+          )}
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{ borderColor: "red" }}>
                 <TextField
-                  autoComplete="given-name"
+                  
                   name="name"
                   required
                   fullWidth
                   id="name"
                   label="Name"
+                  value={name}
                   autoFocus
 
                 />
@@ -214,7 +220,8 @@ export default function SignUp() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  autoComplete="email"
+                  value={email}
+
                 />
               </Grid>
               <Grid item xs={12}>

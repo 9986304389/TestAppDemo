@@ -10,10 +10,12 @@ const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-
-    const receivedData = location.state && location.state.data;
-    console.log(receivedData);
-
+    let user_Details = {};
+    console.log("hey")
+    if (location.state) {
+        user_Details.email = location.state;
+        console.log(location);
+    }
     const moveDashbaordpage = () => {
         // Navigate to another page
         navigate('/DashbaordPage');
@@ -34,7 +36,7 @@ const MainPage = () => {
 
             </div> */}
 
-            <Mainpagecontent />
+            <Mainpagecontent receivedData={user_Details} />
         </div>
 
     )

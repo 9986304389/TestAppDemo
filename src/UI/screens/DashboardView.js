@@ -13,8 +13,6 @@ import Paper from '@mui/material/Paper';
 const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
-
     const receivedData = location.state && location.state.data;
     console.log(receivedData);
 
@@ -25,7 +23,7 @@ const MainPage = () => {
     return (
 
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-            <Table />
+            <Table receivedData={receivedData}/>
 
         </Paper>
 
