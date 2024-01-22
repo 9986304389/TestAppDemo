@@ -16,9 +16,12 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import TextField from '@mui/material/TextField';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
+import Box from '@mui/material/Box';
+import InputBase from '@mui/material/InputBase';
+
 export default function Orders(props) {
   const [data, setData] = useState([]);
-  const [admin,setadmin]=useState([]);
+  const [admin, setadmin] = useState([]);
   //get the readinformation data 
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [alertConfig, setAlertConfig] = useState({
@@ -30,7 +33,7 @@ export default function Orders(props) {
 
   const { receivedData } = props;
   console.log(receivedData)
-  
+
   let isAdmin = receivedData == 'admin@gmail.com';
 
   useEffect(() => {
@@ -127,43 +130,175 @@ export default function Orders(props) {
   };
 
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [nameSearch, setNameSearch] = useState('');
+  const [emailSearch, setEmailSearch] = useState('');
+  const [infoSearch, setInfoSearch] = useState('');
+
+  const filterData = () => {
+    return data.filter(
+      (row) =>
+        row.name.toLowerCase().includes(nameSearch.toLowerCase()) &&
+        row.email.toLowerCase().includes(emailSearch.toLowerCase()) &&
+        row.readinformation.some(
+          (info) =>
+            info.day.toLowerCase().includes(infoSearch.toLowerCase()) ||
+            info.date.toLowerCase().includes(infoSearch.toLowerCase()) ||
+            info.information.toLowerCase().includes(infoSearch.toLowerCase())
+        )
+    );
+  };
+
+  const filteredData = filterData();
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {props.children}
       </Typography>
       <Typography component="h1" variant="h5" m={2}>
+        {isAdmin ? 'Admin' : ''}
         {data.map((row) => (
           <React.Fragment key={row.id}>
-            {row.name}
+            {isAdmin ? '' : row.name}
           </React.Fragment>
         ))}
       </Typography>
-      <TextField
-        label="Search by Month"
-        variant="outlined"
-        fullWidth
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: '16px' }}
-      />
+
       {console.log(isAdmin)}
       {isAdmin ? (<div style={{ overflowX: 'auto' }}>
+
         {/* Render admin table */}
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontSize: 20 }}>Admin Table</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          {/* ... rest of the admin table code ... */}
-        </Table>
+        <>
+          <div>
+            <TextField
+              label="Search by Name"
+              variant="outlined"
+
+              value={nameSearch}
+              onChange={(e) => setNameSearch(e.target.value)}
+              style={{ marginBottom: '16px', margin: 8 }}
+
+            />
+            {/* <InputBase
+          placeholder="Search by Name"
+          value={nameSearch}
+          onChange={(e) => setNameSearch(e.target.value)}
+        /> */}
+            {/* <InputBase
+          placeholder="Search by Email"
+          value={emailSearch}
+          onChange={(e) => setEmailSearch(e.target.value)}
+        /> */}
+            <TextField
+              label="Search by Email"
+              variant="outlined"
+
+              value={emailSearch}
+              onChange={(e) => setEmailSearch(e.target.value)}
+              style={{ marginBottom: '16px', margin: 8 }}
+            />
+          </div>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell colSpan={3}>
+                  {/* <InputBase
+                placeholder="Search in Read Information"
+                value={infoSearch}
+                onChange={(e) => setInfoSearch(e.target.value)}
+              /> */}
+                  <TextField
+                    label="Search in Read Information"
+                    variant="outlined"
+
+                    value={infoSearch}
+                    onChange={(e) => setInfoSearch(e.target.value)}
+                    style={{ marginBottom: '16px', margin: 8 }}
+                  />
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData.map((row) => (
+                <React.Fragment key={row.id}>
+                  <TableRow>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell colSpan={3}>
+                      <Box sx={{ maxHeight: '200px', overflow: 'auto' }}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Day</TableCell>
+                              <TableCell>Date</TableCell>
+                              <TableCell>Information</TableCell>
+                              <TableCell>Status</TableCell>
+                              <TableCell>Edit</TableCell>
+                              <TableCell>Delete</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {row.readinformation.map((info, index) => (
+                              <TableRow key={index}>
+                                <TableCell>{info.day}</TableCell>
+                                <TableCell>{info.date}</TableCell>
+                                <TableCell>{info.information}</TableCell>
+                                <TableCell>
+                                  <span
+                                    style={{
+                                      color: info.status === 1 ? 'green' : 'red',
+                                    }}
+                                  >
+                                    {info.status === 1 ? 'Done' : 'Not Done'}
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  <Tooltip title="Edit">
+                                    <IconButton
+                                      color="success"
+                                      aria-label="edit"
+                                      onClick={() => handleButtonClick(row)}
+                                    >
+                                      <ModeEditIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </TableCell>
+                                <TableCell>
+                                  <Tooltip title="Delete">
+                                    <IconButton
+                                      color="error"
+                                      aria-label="delete"
+                                      onClick={() => handleButtonClick(row)}
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </>
       </div>) : (
         <div style={{ overflowX: 'auto' }}>
+          <TextField
+            label="Search by Month"
+            variant="outlined"
+            fullWidth
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ marginBottom: '16px' }}
+          />
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -171,8 +306,8 @@ export default function Orders(props) {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
+                {/* <TableCell>Edit</TableCell>
+                <TableCell>Delete</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -197,7 +332,7 @@ export default function Orders(props) {
                           </span>
 
                         </TableCell>
-                        <TableCell>
+                        {/* <TableCell>
                           <Tooltip title="Edit">
                             <IconButton
                               color="success"
@@ -218,7 +353,7 @@ export default function Orders(props) {
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     ))}
                 </React.Fragment>

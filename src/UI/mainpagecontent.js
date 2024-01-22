@@ -181,7 +181,9 @@ export default function SignUp(props) {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
 
-
+        <Typography component="h1" variant="h5" m={2}>
+        Leap year bible study form
+      </Typography>
         <Box
           sx={{
             marginTop: 8,
