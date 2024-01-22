@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useEffect} from 'react';
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
@@ -6,12 +6,12 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
-
+import { useNavigate } from 'react-router-dom'
 export default function CheckboxesGroup(props) {
     const { sendDataToParents } = props;
 
     const [state, setState] = React.useState({
-        gilad: false,
+        gilad: true,
     });
 
     const handleChange = (event) => {
@@ -23,7 +23,11 @@ export default function CheckboxesGroup(props) {
         sendDataToParents(event.target.checked);
 
     };
-
+    useEffect(() => {
+        // Send the initial state value when the component mounts
+        sendDataToParents(state.gilad);
+    }, [sendDataToParents, state.gilad]);
+    console.log(state)
     const { gilad } = state;
     const error = [gilad].filter((v) => v).length !== 2;
 

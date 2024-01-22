@@ -60,7 +60,7 @@ export default function SignUp(props) {
   const { receivedData } = props;
   let email = receivedData.email.data;
   let name = receivedData.email.name;
- 
+
   const firstLetter = receivedData.eamil ? receivedData.eamil.data.charAt(0).toUpperCase() : '';
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -70,56 +70,73 @@ export default function SignUp(props) {
     let name = data.get('name');
     let todaystudy = selectStudy;
     let status = completestatus;
-    const [day, date, information] = todaystudy.split(',');
+    console.log(status)
+    let [day, date, information] = "";
+    if (todaystudy != "") {
+      [day, date, information] = todaystudy.split(',');
 
-    console.log('day:', day.trim());
-    console.log('date:', date.trim());
-    console.log('information:', information.trim());
+      let readdataobj = {
+        day: day.trim(),
+        date: date.trim(),
+        information: information.trim()
+      }
+      let form_data = {
+        name: name,
+        email: email,
+        readinformation: [readdataobj]
+      }
+      try {
+        const response = await fetch('https://chbackend.vercel.app/api/save_form_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(form_data),
+        });
 
-    let readdataobj = {
-      day: day.trim(),
-      date: date.trim(),
-      information: information.trim()
-    }
-    let form_data = {
-      name: name,
-      email: email,
-      readinformation: [readdataobj]
-    }
-    try {
-      const response = await fetch('https://chbackend.vercel.app/api/save_form_data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form_data),
-      });
+        if (response.ok) {
 
-      if (response.ok) {
-
-        const result = await response.json();
-        console.log(result);
-        if (result.status) {
-          // Set success alert config
-          setAlertConfig({
-            show: true,
-            message: result.message, // Adjust based on your API response structure
-            severity: 'success',
-          });
-          setTimeout(() => {
+          const result = await response.json();
+          console.log(result);
+          if (result.status) {
+            // Set success alert config
             setAlertConfig({
-              show: false,
-              message: '',
+              show: true,
+              message: result.message, // Adjust based on your API response structure
               severity: 'success',
             });
-          }, 3000);
+            setTimeout(() => {
+              setAlertConfig({
+                show: false,
+                message: '',
+                severity: 'success',
+              });
+            }, 3000);
 
-        }
-        else {
+          }
+          else {
+            // Set failure alert config
+            setAlertConfig({
+              show: true,
+              message: result.message,
+              severity: 'error',
+            });
+            setTimeout(() => {
+              setAlertConfig({
+                show: false,
+                message: '',
+                severity: 'success',
+              });
+            }, 3000);
+
+          }
+        } else {
+          console.error('Failed to fetch data');
+
           // Set failure alert config
           setAlertConfig({
             show: true,
-            message: result.message,
+            message: 'API call failed!',
             severity: 'error',
           });
           setTimeout(() => {
@@ -131,13 +148,13 @@ export default function SignUp(props) {
           }, 3000);
 
         }
-      } else {
-        console.error('Failed to fetch data');
+      } catch (error) {
+        console.error('Error:', error);
 
-        // Set failure alert config
+        // Set error alert config
         setAlertConfig({
           show: true,
-          message: 'API call failed!',
+          message: 'An error occurred!',
           severity: 'error',
         });
         setTimeout(() => {
@@ -147,26 +164,8 @@ export default function SignUp(props) {
             severity: 'success',
           });
         }, 3000);
-
       }
-    } catch (error) {
-      console.error('Error:', error);
-
-      // Set error alert config
-      setAlertConfig({
-        show: true,
-        message: 'An error occurred!',
-        severity: 'error',
-      });
-      setTimeout(() => {
-        setAlertConfig({
-          show: false,
-          message: '',
-          severity: 'success',
-        });
-      }, 3000);
     }
-
   };
 
   const [age, setAge] = React.useState('');
@@ -201,7 +200,7 @@ export default function SignUp(props) {
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{ borderColor: "red" }}>
                 <TextField
-                  
+
                   name="name"
                   required
                   fullWidth

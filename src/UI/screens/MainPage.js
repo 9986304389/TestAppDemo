@@ -11,7 +11,7 @@ const MainPage = () => {
     const navigate = useNavigate();
 
     let user_Details = {};
-    console.log("hey")
+
     if (location.state) {
         user_Details.email = location.state;
         console.log(location);
