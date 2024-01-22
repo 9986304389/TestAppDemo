@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,20 +13,117 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
-
-
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import CheckIcon from '@mui/icons-material/Check';
+import ErrorIcon from '@mui/icons-material/Error';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const handleSubmit = (event) => {
+    const [alertConfig, setAlertConfig] = useState({
+        show: false,
+        message: '',
+        severity: 'success',
+    });
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
             email: data.get('email'),
             password: data.get('password'),
         });
+        let signup = {
+            name: data.get('name'),
+            email: data.get('email'),
+            phonenumber: data.get('phone'),
+            password: data.get('password')
+
+        }
+
+        try {
+            const response = await fetch('https://chbackend.vercel.app/api/save_user_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(signup),
+            });
+
+            if (response.ok) {
+
+                const result = await response.json();
+                console.log(result);
+                if (result.status) {
+                    // Set success alert config
+                    setAlertConfig({
+                        show: true,
+                        message: result.message, // Adjust based on your API response structure
+                        severity: 'success',
+                    });
+                    setTimeout(() => {
+                        setAlertConfig({
+                            show: false,
+                            message: '',
+                            severity: 'success',
+                        });
+                    }, 3000);
+
+                }
+                else {
+                    // Set failure alert config
+                    setAlertConfig({
+                        show: true,
+                        message: result.message,
+                        severity: 'error',
+                    });
+                    setTimeout(() => {
+                        setAlertConfig({
+                            show: false,
+                            message: '',
+                            severity: 'success',
+                        });
+                    }, 3000);
+
+                }
+            } else {
+                console.error('Failed to fetch data');
+
+                // Set failure alert config
+                setAlertConfig({
+                    show: true,
+                    message: 'API call failed!',
+                    severity: 'error',
+                });
+                setTimeout(() => {
+                    setAlertConfig({
+                        show: false,
+                        message: '',
+                        severity: 'success',
+                    });
+                }, 3000);
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+
+            // Set error alert config
+            setAlertConfig({
+                show: true,
+                message: 'An error occurred!',
+                severity: 'error',
+            });
+            setTimeout(() => {
+                setAlertConfig({
+                    show: false,
+                    message: '',
+                    severity: 'success',
+                });
+            }, 3000);
+        }
+
     };
 
     const navigate = useNavigate();
@@ -54,16 +151,22 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
+                    {alertConfig.show && (
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            {console.log(alertConfig.severity)}
+                            <Alert severity={alertConfig.severity}>{alertConfig.message}</Alert>
+                        </Stack>
+                    )}
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
+
+                                    name="name"
                                     required
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
+                                    id="name"
+                                    label="Name"
                                     autoFocus
                                 />
                             </Grid>
@@ -115,6 +218,7 @@ export default function SignUp() {
                             </Grid>
                         </Grid>
                     </Box>
+
                 </Box>
             </Container>
         </ThemeProvider>

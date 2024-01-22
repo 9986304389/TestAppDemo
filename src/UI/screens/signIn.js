@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,6 +14,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignUp from '../screens/signUp';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import axios from 'axios';
 
 function Copyright(props) {
     return (
@@ -33,19 +36,100 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-
+    const [alertConfig, setAlertConfig] = useState({
+        show: false,
+        message: '',
+        severity: 'success',
+    });
     const navigate = useNavigate();
 
     const handleClick = () => {
         // Navigate to another page
         navigate('/signUP');
     };
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+
         const data = new FormData(event.currentTarget);
         let email = data.get('email');
         let password = data.get('password');
-        console.log(email, password)
+        console.log(email, password);
+        let data_json = {
+            email: email,
+            password: password
+        }
+
+        try {
+            const response = await fetch('https://chbackend.vercel.app/api/get_user_validation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data_json),
+            });
+
+            if (response.ok) {
+
+                const result = await response.json();
+                console.log(result);
+                if (result.status) {
+
+                    // Set success alert config
+                    //navigate('/mainpage');
+                    navigate('/DashbaordPage', { state: { data: email } });
+
+                }
+                else {
+                    // Set failure alert config
+                    setAlertConfig({
+                        show: true,
+                        message: result.message,
+                        severity: 'error',
+                    });
+                    setTimeout(() => {
+                        setAlertConfig({
+                            show: false,
+                            message: '',
+                            severity: 'success',
+                        });
+                    }, 3000);
+
+                }
+            } else {
+                console.error('Failed to fetch data');
+
+                // Set failure alert config
+                setAlertConfig({
+                    show: true,
+                    message: 'API call failed!',
+                    severity: 'error',
+                });
+                setTimeout(() => {
+                    setAlertConfig({
+                        show: false,
+                        message: '',
+                        severity: 'success',
+                    });
+                }, 3000);
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+
+            // Set error alert config
+            setAlertConfig({
+                show: true,
+                message: 'An error occurred!',
+                severity: 'error',
+            });
+            setTimeout(() => {
+                setAlertConfig({
+                    show: false,
+                    message: '',
+                    severity: 'success',
+                });
+            }, 3000);
+        }
     };
 
 
@@ -67,6 +151,12 @@ export default function SignIn() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
+                    {alertConfig.show && (
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            {console.log(alertConfig.severity)}
+                            <Alert severity={alertConfig.severity}>{alertConfig.message}</Alert>
+                        </Stack>
+                    )}
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -97,6 +187,7 @@ export default function SignIn() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+
                         >
                             Sign In
                         </Button>
@@ -115,7 +206,7 @@ export default function SignIn() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 8, mb: 4 }} />
+
             </Container>
         </ThemeProvider>
     );

@@ -6,6 +6,10 @@ import Mainpagecontent from '../mainpagecontent'
 import { useLocation } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom'
+import Table from './Tables';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 const MainPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,23 +23,11 @@ const MainPage = () => {
         navigate('/DashbaordPage');
     };
     return (
-        <div className='mainpage'>
 
-            {/* <div className="header">
-                <div className="left">
-                    <Personavatar receivedData={receivedData} />
-                </div>
-                <div className="center">
-                    <h1> Leap year bible study form</h1>
-                </div>
-                <div className="right">
-                    <img className="NLF_logo" src={img} alt="Avatar" />
-                </div>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <Table />
 
-            </div> */}
-
-            <Mainpagecontent />
-        </div>
+        </Paper>
 
     )
 }
