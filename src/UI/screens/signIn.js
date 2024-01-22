@@ -136,7 +136,7 @@ export default function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <div className="header">
+            {/* <div className="header">
 
                 <div className="left">
                     <img className="NLF_logo" src={img} alt="Avatar" />
@@ -148,9 +148,23 @@ export default function SignIn() {
                         {"Sign Up"}
                     </Link>
                 </div>
+                
 
+
+            </div> */}
+            <div className="header">
+                <div className="left">
+                    {/* <Personavatar receivedData={receivedData} /> */}
+                </div>
+                <div className="center">
+                    <h1>New Life Fellowship</h1>
+                </div>
+                <div className="right">
+                    <img className="NLF_logo" src={img} alt="Avatar" />
+                </div>
 
             </div>
+
             <Container component="main" maxWidth="xs">
 
                 <CssBaseline />
