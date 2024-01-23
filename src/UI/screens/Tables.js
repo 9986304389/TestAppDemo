@@ -177,7 +177,7 @@ export default function Orders(props) {
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
         {props.children}
       </Typography>
-      <Typography component="h1" variant="h5" m={2}>
+      <Typography component="h1" variant="h5" m={2} color={'#660066'}>
         {isAdmin ? 'Admin' : ''}
         {data.map((row) => (
           <React.Fragment key={row.id}>

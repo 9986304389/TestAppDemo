@@ -38,7 +38,9 @@ export default function CheckboxesGroup(props) {
                 <FormGroup>
                     <FormControlLabel
                         control={
-                            <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
+                            <Checkbox checked={gilad} onChange={handleChange} name="gilad" sx={{color:"#660066",'&.Mui-checked': {
+                                color:'#660066',
+                              },}} />
                         }
                         label="Completed"
                     />

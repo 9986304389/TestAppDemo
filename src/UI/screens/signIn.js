@@ -142,10 +142,10 @@ export default function SignIn() {
                     <img className="NLF_logo" src={img} alt="Avatar" />
                 </div>
                 <div className="center">
-                    <h1 style={{fontFamily:"'Roboto','Helvetica','Arial',sans-serif",fontWeight:600}}>New Life Fellowship</h1>
+                    <h1 style={{fontFamily:"'Roboto','Helvetica','Arial',sans-serif",fontWeight:600,color:'#660066'}}>New Life Fellowship</h1>
                 </div>
                 <div className="right">
-                    <Link href="#" variant="body2" onClick={handleClick} style={{ whiteSpace: 'nowrap', margin: 4, fontSize: 18, textDecoration: 'none', color: 'black' }}>
+                    <Link href="#" variant="body2" onClick={handleClick} style={{ whiteSpace: 'nowrap', margin: 4, fontSize: 18, textDecoration: 'none', color: '#660066' }}>
                         {"Sign Up"}
                     </Link>
 
@@ -164,7 +164,7 @@ export default function SignIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <Avatar sx={{ m: 1, bgcolor: '#660066' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
@@ -208,9 +208,9 @@ export default function SignIn() {
                             sx={{
                                 mt: 3,
                                 mb: 2,
-                                bgcolor: 'secondary.main',
+                                bgcolor: '#660066',
                                 '&:hover': {
-                                    bgcolor: 'secondary.main' // Replace 'hoverColor' with the color you want on hover
+                                    bgcolor: '#660066' // Replace 'hoverColor' with the color you want on hover
                                 }
                             }}
                         >
@@ -218,12 +218,12 @@ export default function SignIn() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2" style={{ textDecoration: 'none', color: 'black' }}>
+                                <Link href="#" variant="body2" style={{ textDecoration: 'none', color: '#660066' }}>
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2" onClick={handleClick} style={{ textDecoration: 'none', color: 'black' }}>
+                                <Link href="#" variant="body2" onClick={handleClick} style={{ textDecoration: 'none', color: '#660066' }}>
                                     {"Don't have an account? Sign Up"}
                                 </Link>
 

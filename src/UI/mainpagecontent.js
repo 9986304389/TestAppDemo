@@ -251,9 +251,9 @@ export default function SignUp(props) {
               sx={{
                 mt: 3,
                 mb: 2,
-                bgcolor: 'secondary.main',
+                bgcolor: '#660066',
                 '&:hover': {
-                  bgcolor: 'secondary.main',
+                  bgcolor: '#660066',
                 },
               }}
             >
