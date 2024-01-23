@@ -214,7 +214,7 @@ export default function SignIn() {
                                 }
                             }}
                         >
-                            Login In
+                            Login
                         </Button>
                         <Grid container>
                             <Grid item xs>
