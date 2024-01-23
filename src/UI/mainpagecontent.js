@@ -70,7 +70,9 @@ export default function SignUp(props) {
     let name = data.get('name');
     let todaystudy = selectStudy;
     let status = completestatus;
-    console.log(status)
+
+    const dataToSend = status ? 1 : 0;
+
     let [day, date, information] = "";
     if (todaystudy != "") {
       [day, date, information] = todaystudy.split(',');
@@ -78,7 +80,8 @@ export default function SignUp(props) {
       let readdataobj = {
         day: day.trim(),
         date: date.trim(),
-        information: information.trim()
+        information: information.trim(),
+        status: dataToSend
       }
       let form_data = {
         name: name,
@@ -182,8 +185,8 @@ export default function SignUp(props) {
         <CssBaseline />
 
         <Typography component="h1" variant="h5" m={2}>
-        Leap year bible study form
-      </Typography>
+          Leap year bible study form
+        </Typography>
         <Box
           sx={{
             marginTop: 8,
@@ -210,7 +213,10 @@ export default function SignUp(props) {
                   label="Name"
                   value={name}
                   autoFocus
-
+                  InputProps={{
+                    readOnly: true,
+                    style: { color: 'gray' },
+                  }}
                 />
               </Grid>
 
@@ -222,6 +228,10 @@ export default function SignUp(props) {
                   label="Email Address"
                   name="email"
                   value={email}
+                  InputProps={{
+                    readOnly: true,
+                    style: { color: 'gray' },
+                  }}
 
                 />
               </Grid>
