@@ -6,7 +6,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 export default function CheckboxesGroup(props) {
     const { sendDataToParents } = props;
 
@@ -42,7 +42,7 @@ export default function CheckboxesGroup(props) {
                                 color:'#660066',
                               },}} />
                         }
-                        
+
                         label="Completed"
                     />
 

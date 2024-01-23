@@ -24,7 +24,7 @@ import SignIn from './signIn';
 import Signup from './signUp';
 import FormComponent from './MainPage';
 import DashboardComponent from './DashboardView';
-
+import '../../App.css';
 
 // function Copyright(props) {
 //   return (
