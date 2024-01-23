@@ -303,7 +303,7 @@ export default function Orders(props) {
             fullWidth
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ marginBottom: '16px' }}
+            style={{ marginBottom: 20 ,marginTop:8}}
           />
           <Table size="small">
             <TableHead>
