@@ -42,6 +42,7 @@ export default function CheckboxesGroup(props) {
                                 color:'#660066',
                               },}} />
                         }
+                        
                         label="Completed"
                     />
 
