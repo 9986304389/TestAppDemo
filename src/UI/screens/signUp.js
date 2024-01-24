@@ -138,7 +138,7 @@ export default function SignUp() {
         <ThemeProvider theme={defaultTheme}>
 
             <div className="right">
-                <Link href="#" variant="body2" onClick={Navmainpage} style={{ whiteSpace: 'nowrap', margin: 20, fontSize: 18,textDecoration: 'none', color: 'black' }}>
+                <Link href="#" variant="body2" onClick={Navmainpage} style={{ whiteSpace: 'nowrap', margin: 20, fontSize: 18, textDecoration: 'none', color: '#660066' }}>
                     {"Sign In"}
                 </Link>
 
@@ -154,7 +154,7 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <Avatar sx={{ m: 1, bgcolor: '#660066' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
@@ -215,13 +215,18 @@ export default function SignUp() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{
+                                mt: 3, mb: 2, bgcolor: '#660066',
+                                '&:hover': {
+                                    bgcolor: '#660066',
+                                },
+                            }}
                         >
                             Sign Up
                         </Button>
-                        <Grid container justifyContent="flex-end">
+                        <Grid container justifyContent="flex-end" sx={{mb:5}}>
                             <Grid item>
-                                <Link href="#" variant="body2" onClick={Navmainpage} style={{ textDecoration: 'none', color: 'black' }}>
+                                <Link href="#" variant="body2" onClick={Navmainpage} style={{ textDecoration: 'none', color: '#660066' }}>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

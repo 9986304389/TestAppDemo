@@ -25,7 +25,7 @@ import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import Stack from '@mui/material/Stack';
 // import Datepicker from './Datepicker';
-
+import CircularProgress from '@mui/material/CircularProgress';
 const generateDateOptions = () => {
   const startDate = new Date('2024-01-01');
   const endDate = new Date('2024-12-31');
@@ -58,8 +58,9 @@ const date_formate = (selectDate) => {
   return formattedDate;
 }
 export default function Orders(props) {
-  const dateOptions = generateDateOptions();
+  const [loading, setLoading] = useState(false);
 
+  const dateOptions = generateDateOptions();
   const [data, setData] = useState([]);
   const [admin, setadmin] = useState([]);
   //get the readinformation data 
@@ -82,6 +83,7 @@ export default function Orders(props) {
       const data_json = { email: email };
 
       try {
+        setLoading(true);
         const response = await fetch('https://chbackend.vercel.app/api/view_form_data', {
           method: 'POST',
           headers: {
@@ -157,6 +159,9 @@ export default function Orders(props) {
             severity: 'success',
           });
         }, 3000);
+      }
+      finally{
+        setLoading(false);
       }
     };
 
@@ -262,15 +267,7 @@ export default function Orders(props) {
         {/* Render admin table */}
         <>
           <div>
-            {/* <TextField
-              label="Search by Name"
-              variant="outlined"
-
-              value={nameSearch}
-              onChange={(e) => setNameSearch(e.target.value)}
-              style={{ marginBottom: '16px', margin: 8 }}
-
-            /> */}
+           
             <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
               <InputLabel id="demo-select-small-label">Search by Name</InputLabel>
               <Select
@@ -528,6 +525,24 @@ export default function Orders(props) {
             </TableBody>
           </Table>
         </div>
+      )}
+      {loading && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adjust background color and opacity
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <CircularProgress size={60} color="secondary" />
+        </Box>
       )}
     </React.Fragment>
   );

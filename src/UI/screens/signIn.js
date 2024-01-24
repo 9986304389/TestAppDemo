@@ -29,7 +29,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import CircularProgress from '@mui/material/CircularProgress';
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -48,6 +48,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+    const [loading, setLoading] = useState(false);
     const [alertConfig, setAlertConfig] = useState({
         show: false,
         message: '',
@@ -77,6 +78,7 @@ export default function SignIn() {
         }
 
         try {
+            setLoading(true);
             const response = await fetch('https://chbackend.vercel.app/api/get_user_validation', {
                 method: 'POST',
                 headers: {
@@ -146,6 +148,9 @@ export default function SignIn() {
                     severity: 'success',
                 });
             }, 3000);
+        } finally {
+            // Set loading back to false when the API call is completed
+            setLoading(false);
         }
     };
 
@@ -224,7 +229,7 @@ export default function SignIn() {
                         <FormControl sx={{ mt: 5 }} fullWidth variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
-                               
+
                                 type={showPassword ? 'text' : 'password'}
                                 endAdornment={
                                     <InputAdornment position="end">
@@ -247,9 +252,9 @@ export default function SignIn() {
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
-                            sx={{marginTop:2}}
+                            sx={{ marginTop: 2 }}
                         />
-                        <Button
+                        {/* <Button
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -262,7 +267,25 @@ export default function SignIn() {
                                 }
                             }}
                         >
-                            Login
+                             {loading && <CircularProgress />} Login
+                        </Button>
+                        */}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                          
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                bgcolor: '#660066',
+                                '&:hover': {
+                                    bgcolor: '#660066',
+                                },
+                            }}
+                        >
+                            {/* Conditional rendering of the spinner inside the button */}
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
                         </Button>
                         <Grid container>
                             <Grid item xs>

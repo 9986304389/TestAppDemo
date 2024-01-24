@@ -18,7 +18,7 @@ import Select from './select';
 import Checkboxcmp from './checkbox';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Copyright(props) {
   return (
@@ -38,7 +38,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp(props) {
-
+  const [loading, setLoading] = useState(false);
   const [selectStudy, setselectStudy] = React.useState('');
   const [completestatus, setcompletestatus] = React.useState('');
   const [alertConfig, setAlertConfig] = useState({
@@ -89,6 +89,7 @@ export default function SignUp(props) {
         readinformation: [readdataobj]
       }
       try {
+        setLoading(true);
         const response = await fetch('https://chbackend.vercel.app/api/save_form_data', {
           method: 'POST',
           headers: {
@@ -168,6 +169,10 @@ export default function SignUp(props) {
           });
         }, 3000);
       }
+      finally {
+        // Set loading back to false when the API call is completed
+        setLoading(false);
+      }
     }
   };
 
@@ -244,7 +249,7 @@ export default function SignUp(props) {
               </Grid>
               <Checkboxcmp sendDataToParents={handleChildData_Checkbox} />
             </Grid>
-            <Button
+            {/* <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -258,6 +263,24 @@ export default function SignUp(props) {
               }}
             >
               Submit
+            </Button> */}
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+
+              sx={{
+                mt: 3,
+                mb: 2,
+                bgcolor: '#660066',
+                '&:hover': {
+                  bgcolor: '#660066',
+                },
+              }}
+            >
+              {/* Conditional rendering of the spinner inside the button */}
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
             </Button>
             <Grid container justifyContent="flex-end">
 
