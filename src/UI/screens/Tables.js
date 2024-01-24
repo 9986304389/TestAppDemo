@@ -18,8 +18,48 @@ import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 import Box from '@mui/material/Box';
 import InputBase from '@mui/material/InputBase';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+// import Datepicker from './Datepicker';
 
+const generateDateOptions = () => {
+  const startDate = new Date('2024-01-01');
+  const endDate = new Date('2024-12-31');
+  const dateOptions = [];
+
+  for (let currentDate = startDate; currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+    const day = currentDate.getDate().toString().padStart(2, '0'); // Ensure two-digit day
+    const month = currentDate.toLocaleString('default', { month: 'short' }); // Short month name
+    const formattedDate = `${day}-${month}`;
+
+    dateOptions.push(
+      <MenuItem key={formattedDate} value={formattedDate}>
+        {formattedDate}
+      </MenuItem>
+    );
+  }
+
+  return dateOptions;
+};
+
+const date_formate = (selectDate) => {
+  const [day, month, year] = selectDate.split('-').map(Number);
+
+  // Create a Date object using the extracted components
+  const dateObject = new Date(year, month - 1, day);
+
+  // Format the date in the desired format
+  const formattedDate = `${day}-${dateObject.toLocaleString('default', { month: 'short' })}`;
+  console.log(formattedDate)
+  return formattedDate;
+}
 export default function Orders(props) {
+  const dateOptions = generateDateOptions();
+
   const [data, setData] = useState([]);
   const [admin, setadmin] = useState([]);
   //get the readinformation data 
@@ -133,7 +173,19 @@ export default function Orders(props) {
   const [nameSearch, setNameSearch] = useState('');
   const [emailSearch, setEmailSearch] = useState('');
   const [infoSearch, setInfoSearch] = useState('');
+  const [infoSearchmont, setInfoSearchmont] = useState('');
+  const [selectDate, setDate] = React.useState('');
+  const [selectMont, setMonth] = React.useState('');
+  // Callback function to receive data from child
+  // const handleChildData = (data) => {
+  //   setDate(data);
+   
+  // };
 
+  // console.log(selectDate);
+
+  //   const Month = date_formate(selectDate)
+  //   console.log(Month);
   const filterData = () => {
     return data.map((row) => {
       const filteredReadInformation = (row.readinformation || []).filter(
@@ -145,11 +197,23 @@ export default function Orders(props) {
           typeof info.day === 'string' &&
           typeof info.date === 'string' &&
           typeof info.information === 'string' &&
-          info.day.toLowerCase().trim().includes(infoSearch.toLowerCase().trim()) ||
-          info.date.toLowerCase().trim().includes(infoSearch.toLowerCase().trim())||
+          info.day.toLowerCase().trim() == (infoSearch.toLowerCase().trim()) ||
+          info.date.toLowerCase().trim().includes(infoSearch.toLowerCase().trim()) ||
           info.information.toLowerCase().trim().includes(infoSearch.toLowerCase().trim())
       );
 
+      //  const filteredReadInformation_month = (row.readinformation || []).filter(
+      //     (info) =>
+      //       info &&
+
+      //       info.date &&
+
+
+      //       typeof info.date === 'string' &&
+
+      //       info.date.toLowerCase().trim().includes(infoSearchmont.toLowerCase().trim())
+
+      //   );
       // Check both conditions for filtering based on name and email
       if (
         row.name.toLowerCase().includes(nameSearch.toLowerCase()) &&
@@ -158,6 +222,7 @@ export default function Orders(props) {
         return {
           ...row,
           readinformation: filteredReadInformation,
+
         };
       } else {
         // If the name or email does not match, return null or an empty object
@@ -171,6 +236,11 @@ export default function Orders(props) {
 
 
   const filteredData = filterData();
+
+  const handleRefreshClick = () => {
+    // Reload the page
+    window.location.reload();
+  };
 
   return (
     <React.Fragment>
@@ -192,7 +262,7 @@ export default function Orders(props) {
         {/* Render admin table */}
         <>
           <div>
-            <TextField
+            {/* <TextField
               label="Search by Name"
               variant="outlined"
 
@@ -200,22 +270,113 @@ export default function Orders(props) {
               onChange={(e) => setNameSearch(e.target.value)}
               style={{ marginBottom: '16px', margin: 8 }}
 
-            />
-            <TextField
+            /> */}
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
+              <InputLabel id="demo-select-small-label">Search by Name</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={nameSearch}
+                onChange={(e) => setNameSearch(e.target.value)}
+                label="Search by Name"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {data.map((row) => (
+                  <MenuItem value={row.name}>{row.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
+              <InputLabel id="demo-select-small-label">Search by Email</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={emailSearch}
+                onChange={(e) => setEmailSearch(e.target.value)}
+                label="Search by Email"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {data.map((row) => (
+                  <MenuItem value={row.email}>{row.email}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
+              <InputLabel id="demo-select-small-label">Search by Day</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                label="Search in Read Information"
+                variant="outlined"
+                value={infoSearch}
+                onChange={(e) => setInfoSearch(e.target.value)}
+
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+
+                {Array.from({ length: 366 }, (_, index) => (
+                  <MenuItem key={index + 1} value={`Day ${index + 1}`}>
+                    {`Day ${index + 1}`}
+                  </MenuItem>
+                ))}
+
+              </Select>
+            </FormControl>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                m: 1,
+                mb: 4,
+                minWidth: 180,
+                bgcolor: '#660066',
+                '&:hover': {
+                  bgcolor: '#660066' // Replace 'hoverColor' with the color you want on hover
+                }
+              }}
+              onClick={handleRefreshClick}
+            >
+              Clear
+            </Button>
+            {/* <Datepicker sendDataToParent={handleChildData} /> */}
+
+
+            {/* <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
+              <InputLabel id="demo-select-small-label">Search by Day</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                label="Search in Read Information"
+                variant="outlined"
+                value={infoSearch}
+                onChange={(e) => setInfoSearchmont(e.target.value)}
+
+              >
+                {dateOptions}
+
+              </Select>
+            </FormControl> */}
+            {/* <TextField
               label="Search by Email"
               variant="outlined"
 
               value={emailSearch}
               onChange={(e) => setEmailSearch(e.target.value)}
               style={{ marginBottom: '16px', margin: 8 }}
-            />
-            <TextField
+            /> */}
+
+
+            {/* <TextField
               label="Search in Read Information"
               variant="outlined"
               value={infoSearch}
               onChange={(e) => setInfoSearch(e.target.value)}
               style={{ marginBottom: '16px', margin: 8 }}
-            />
+            /> */}
           </div>
           <Table size="small">
             <TableHead>
@@ -303,7 +464,7 @@ export default function Orders(props) {
             fullWidth
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ marginBottom: 20 ,marginTop:8}}
+            style={{ marginBottom: 20, marginTop: 8 }}
           />
           <Table size="small">
             <TableHead>

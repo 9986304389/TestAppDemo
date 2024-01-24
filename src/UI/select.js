@@ -29,7 +29,7 @@ export default function SelectAutoWidth(props) {
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={'Day1,01-Jan,Matthew 1-3'}>Day1,01-Jan,Matthew 1-3</MenuItem>
+                    <MenuItem value={'Day 1,01-Jan,Matthew 1-3'}>Day 1,01-Jan,Matthew 1-3</MenuItem>
                     <MenuItem value={'Day 2,02-Jan,Matthew 4-6'}>Day 2,02-Jan,Matthew 4-6</MenuItem>
                     <MenuItem value={'Day 3,03-Jan,Matthew 7-9'}>Day 3,03-Jan,Matthew 7-9</MenuItem>
                     <MenuItem value={'Day 4,04-Jan,Matthew 10-12'}>Day 4,04-Jan,Matthew 10-12</MenuItem>
