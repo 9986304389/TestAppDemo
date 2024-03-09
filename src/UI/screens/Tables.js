@@ -64,7 +64,7 @@ export default function Orders(props) {
   const dateOptions = generateDateOptions();
   const [data, setData] = useState([]);
   const [admin, setadmin] = useState([]);
-  //get the readinformation data 
+  //get the readinformation data
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [alertConfig, setAlertConfig] = useState({
     show: false,
@@ -176,16 +176,21 @@ export default function Orders(props) {
   };
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTermbyuser, setSearchTermbyuser] = useState('');
+  const [searchTerm_1, setSearchTerm_1] = useState('');
   const [nameSearch, setNameSearch] = useState('');
   const [emailSearch, setEmailSearch] = useState('');
+  const [emailSearch_1, setEmailSearch_1] = useState('');
   const [infoSearch, setInfoSearch] = useState('');
+  const [infoSearch_1, setInfoSearch_1] = useState('');
   const [infoSearchmont, setInfoSearchmont] = useState('');
   const [selectDate, setDate] = React.useState('');
-  const [selectMont, setMonth] = React.useState('');
+  const [selectMont, setMonth] = React.useState(false);
 
   const filterData = () => {
     return data.map((row) => {
-      const filteredReadInformation = (row.readinformation || []).filter(
+      const filteredReadInformation = (row?.readinformation).filter(
+
         (info) =>
           info &&
           info.day &&
@@ -194,28 +199,17 @@ export default function Orders(props) {
           typeof info.day === 'string' &&
           typeof info.date === 'string' &&
           typeof info.information === 'string' &&
-          info.day.toLowerCase().trim() == (infoSearch.toLowerCase().trim()) ||
-          info.date.toLowerCase().trim().includes(infoSearch.toLowerCase().trim()) ||
-          info.information.toLowerCase().trim().includes(infoSearch.toLowerCase().trim())
+          info.day.toLowerCase().trim() == (infoSearch_1.toLowerCase().trim()) ||
+          info.date.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim()) ||
+          info.information.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim())
       );
 
-      //  const filteredReadInformation_month = (row.readinformation || []).filter(
-      //     (info) =>
-      //       info &&
-
-      //       info.date &&
-
-
-      //       typeof info.date === 'string' &&
-
-      //       info.date.toLowerCase().trim().includes(infoSearchmont.toLowerCase().trim())
-
-      //   );
       // Check both conditions for filtering based on name and email
       if (
-        row.name.toLowerCase().includes(nameSearch.toLowerCase()) &&
-        row.email.toLowerCase().includes(emailSearch.toLowerCase())
+        row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
+        row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
       ) {
+
         return {
           ...row,
           readinformation: filteredReadInformation,
@@ -232,8 +226,6 @@ export default function Orders(props) {
   };
 
 
-  const filteredData = filterData();
-
   const handleRefreshClick = () => {
     // Reload the page
     window.location.reload();
@@ -243,29 +235,57 @@ export default function Orders(props) {
   const names = data.map(item => item.name);
   const optionList_byname = names.map(name => ({ value: name, label: name }));
 
+
   //search by email options.
   const email = data.map(item => item.email);
   const optionList_byemail = email.map(name => ({ value: name, label: name }));
-  
- 
+
+
   // Get unique months from data
-  
+
   const optionList_month = [
     { value: 'Jan', label: 'January' },
-  { value: 'Feb', label: 'February' },
-  { value: 'Mar', label: 'March' },
-  { value: 'Apr', label: 'April' },
-  { value: 'May', label: 'May' },
-  { value: 'Jun', label: 'June' },
-  { value: 'Jul', label: 'July' },
-  { value: 'Aug', label: 'August' },
-  { value: 'Sep', label: 'September' },
-  { value: 'Oct', label: 'October' },
-  { value: 'Nov', label: 'November' },
-  { value: 'Dec', label: 'December' }
+    { value: 'Feb', label: 'February' },
+    { value: 'Mar', label: 'March' },
+    { value: 'Apr', label: 'April' },
+    { value: 'May', label: 'May' },
+    { value: 'Jun', label: 'June' },
+    { value: 'Jul', label: 'July' },
+    { value: 'Aug', label: 'August' },
+    { value: 'Sep', label: 'September' },
+    { value: 'Oct', label: 'October' },
+    { value: 'Nov', label: 'November' },
+    { value: 'Dec', label: 'December' }
   ];
 
-console.log(nameSearch)
+  function handleSelect_byname(e) {
+    setNameSearch(e)
+    setSearchTerm_1(e.value)
+  }
+
+  function handleSelect_email(e) {
+    setEmailSearch(e)
+    setEmailSearch_1(e.value)
+
+  }
+  function handleSelect_month(e) {
+    setInfoSearch(e)
+    setInfoSearch_1(e.value)
+
+  }
+
+  function handleSelect_month_byuser(e) {
+    setSearchTerm(e)
+    setSearchTermbyuser(e.value)
+  }
+
+  const clearSelection = () => {
+    setSearchTerm(null);
+  }
+
+  const filteredData = filterData();
+
+  console.log(filteredData)
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -287,42 +307,24 @@ console.log(nameSearch)
         <>
           <div>
 
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              {/* <InputLabel id="demo-select-small-label">Search by Name</InputLabel> */}
-              {/* <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={nameSearch}
-                onChange={(e) => setNameSearch(e.value)}
-               // label={nameSearch}
-                isSearchable={true}
-                options={optionList_byname}
-                placeholder="Search by Name"
-              > */}
-               <Select
-                
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, zIndex: 999999 }} size="small">
+
+              <Select
                 options={optionList_byname}
                 placeholder="Search by Name"
                 value={nameSearch}
-                onChange={(e) => setNameSearch(e.value)}
+                onChange={handleSelect_byname}
                 isSearchable={true}
-               
-            />
-                {/* <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {data.map((row) => (
-                  <MenuItem value={row.name}>{row.name}</MenuItem>
-                ))} */}
-              {/* </Select> */}
+
+              />
+
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              {/* <InputLabel id="demo-select-small-label">Search by Email</InputLabel> */}
+            <FormControl sx={{ m: 1, minWidth: 300, mb: 4, zIndex: 999999 }} size="small">
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 value={emailSearch}
-                onChange={(e) => setEmailSearch(e.value)}
+                onChange={handleSelect_email}
                 label="Search by Email"
                 options={optionList_byemail}
                 placeholder="Search by Email"
@@ -331,14 +333,14 @@ console.log(nameSearch)
 
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, zIndex: 999999 }} size="small">
               {/* <InputLabel id="demo-select-small-label">Search by Day</InputLabel> */}
               <Select
                 labelId="demo-select-small-label"
                 label="Search in Read Information"
                 variant="outlined"
                 value={infoSearch}
-                onChange={(e) => setInfoSearch(e.value)}
+                onChange={handleSelect_month}
                 options={optionList_month}
                 placeholder="Search by month"
                 isSearchable={true}
@@ -371,86 +373,56 @@ console.log(nameSearch)
             >
               Clear
             </Button>
-            {/* <Datepicker sendDataToParent={handleChildData} /> */}
 
-
-            {/* <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              <InputLabel id="demo-select-small-label">Search by Day</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                label="Search in Read Information"
-                variant="outlined"
-                value={infoSearch}
-                onChange={(e) => setInfoSearchmont(e.target.value)}
-
-              >
-                {dateOptions}
-
-              </Select>
-            </FormControl> */}
-            {/* <TextField
-              label="Search by Email"
-              variant="outlined"
-
-              value={emailSearch}
-              onChange={(e) => setEmailSearch(e.target.value)}
-              style={{ marginBottom: '16px', margin: 8 }}
-            /> */}
-
-
-            {/* <TextField
-              label="Search in Read Information"
-              variant="outlined"
-              value={infoSearch}
-              onChange={(e) => setInfoSearch(e.target.value)}
-              style={{ marginBottom: '16px', margin: 8 }}
-            /> */}
           </div>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Read Information</TableCell>
-                <TableCell colSpan={3}>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredData.map((row) => (
-                <React.Fragment key={row.id}>
-                  <TableRow>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell colSpan={3}>
-                      <Box sx={{ maxHeight: '200px', overflow: 'auto' }}>
-                        <Table size="small">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Day</TableCell>
-                              <TableCell>Date</TableCell>
-                              <TableCell>Information</TableCell>
-                              <TableCell>Status</TableCell>
-                              {/* <TableCell>Edit</TableCell>
+          <div style={{ minHeight: 500 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Read Information</TableCell>
+                  <TableCell colSpan={3}>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredData.map((row) => (
+                  <React.Fragment key={row.id}>
+                    {row.readinformation.length !== 0 && (
+                      <TableRow>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.email}</TableCell>
+                        <TableCell colSpan={3}>
+                          <Box sx={{ maxHeight: '200px', overflow: 'auto' }}>
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Day</TableCell>
+                                  <TableCell>Date</TableCell>
+                                  <TableCell>Information</TableCell>
+                                  <TableCell>Status</TableCell>
+                                  {/* <TableCell>Edit</TableCell>
                               <TableCell>Delete</TableCell> */}
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {row.readinformation.map((info, index) => (
-                              <TableRow key={index}>
-                                <TableCell>{info.day}</TableCell>
-                                <TableCell>{info.date}</TableCell>
-                                <TableCell>{info.information}</TableCell>
-                                <TableCell>
-                                  <span
-                                    style={{
-                                      color: info.status === 1 ? 'green' : 'red',
-                                    }}
-                                  >
-                                    {info.status === 1 ? 'Done' : 'Not Done'}
-                                  </span>
-                                </TableCell>
-                                {/* <TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {console.log(row.readinformation.length)}
+                                {row.readinformation.length != 0 && row.readinformation.map((info, index) => (
+                                  <TableRow key={index}>
+                                    <TableCell>{info.day}</TableCell>
+                                    <TableCell>{info.date}</TableCell>
+                                    <TableCell>{info.information}</TableCell>
+                                    <TableCell>
+                                      <span
+                                        style={{
+                                          color: info.status === 1 ? 'green' : 'red',
+                                        }}
+                                      >
+                                        {info.status === 1 ? 'Done' : 'Not Done'}
+                                      </span>
+                                    </TableCell>
+                                    {/* <TableCell>
                                   <Tooltip title="Edit">
                                     <IconButton
                                       color="success"
@@ -472,28 +444,66 @@ console.log(nameSearch)
                                     </IconButton>
                                   </Tooltip>
                                 </TableCell> */}
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    )
+                    }
+                  </React.Fragment>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </>
       </div>) : (
-        <div style={{ overflowX: 'auto' }}>
-          <TextField
-            label="Search by Month"
-            variant="outlined"
-            fullWidth
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ marginBottom: 20, marginTop: 8 }}
-          />
+        <div style={{ overflowX: 'auto', minHeight: '500px' }}>
+
+          <div style={{ marginBottom: 20, marginTop: 8, width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div style={{ width: "100%", padding: 10 ,zIndex: 999999}}>
+              <Select
+                labelId="demo-select-small-label"
+                label="Search in Read Information"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSelect_month_byuser}
+                options={optionList_month}
+                placeholder="Search by month"
+                isSearchable={true}
+                sx={{ fontSize: 20, paddingTop: 10 }}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      minHeight: '200px' // Set the minimum height for options
+                    }
+                  }
+                }}
+              />
+            </div>
+            <div style={{ width: "10%", marginTop: 8 }}>
+              {searchTerm && (
+                <Button
+                  onClick={clearSelection}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    mt: 0, mb: 0, bgcolor: '#660066',
+                    width: "100%", fontSize: 12,
+                    '&:hover': {
+                      bgcolor: '#660066',
+                    },
+                  }}
+                >
+                  Clear Selection
+                </Button>
+              )}
+            </div>
+          </div>
+
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -510,7 +520,7 @@ console.log(nameSearch)
                 <React.Fragment key={row.id}>
                   {row.readinformation
                     .filter((info) =>
-                      info.date.toLowerCase().includes(searchTerm.toLowerCase())
+                      info.date.toLowerCase().includes(searchTermbyuser.toLowerCase())
                     )
                     .map((info, index) => (
                       <TableRow key={index}>
@@ -556,27 +566,30 @@ console.log(nameSearch)
             </TableBody>
           </Table>
         </div>
-      )}
-      {loading && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adjust background color and opacity
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-          }}
-        >
-          <CircularProgress size={60} color="secondary" />
-        </Box>
-      )}
-    </React.Fragment>
+      )
+      }
+      {
+        loading && (
+          <Box
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adjust background color and opacity
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 9999,
+            }}
+          >
+            <CircularProgress size={60} color="secondary" />
+          </Box>
+        )
+      }
+    </React.Fragment >
   );
 
-  
+
 }
