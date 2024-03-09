@@ -21,9 +21,10 @@ import InputBase from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+// import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import Stack from '@mui/material/Stack';
+import Select from "react-select";
 // import Datepicker from './Datepicker';
 import CircularProgress from '@mui/material/CircularProgress';
 const generateDateOptions = () => {
@@ -160,7 +161,7 @@ export default function Orders(props) {
           });
         }, 3000);
       }
-      finally{
+      finally {
         setLoading(false);
       }
     };
@@ -181,16 +182,7 @@ export default function Orders(props) {
   const [infoSearchmont, setInfoSearchmont] = useState('');
   const [selectDate, setDate] = React.useState('');
   const [selectMont, setMonth] = React.useState('');
-  // Callback function to receive data from child
-  // const handleChildData = (data) => {
-  //   setDate(data);
-   
-  // };
 
-  // console.log(selectDate);
-
-  //   const Month = date_formate(selectDate)
-  //   console.log(Month);
   const filterData = () => {
     return data.map((row) => {
       const filteredReadInformation = (row.readinformation || []).filter(
@@ -247,6 +239,33 @@ export default function Orders(props) {
     window.location.reload();
   };
 
+  //search by name options
+  const names = data.map(item => item.name);
+  const optionList_byname = names.map(name => ({ value: name, label: name }));
+
+  //search by email options.
+  const email = data.map(item => item.email);
+  const optionList_byemail = email.map(name => ({ value: name, label: name }));
+  
+ 
+  // Get unique months from data
+  
+  const optionList_month = [
+    { value: 'Jan', label: 'January' },
+  { value: 'Feb', label: 'February' },
+  { value: 'Mar', label: 'March' },
+  { value: 'Apr', label: 'April' },
+  { value: 'May', label: 'May' },
+  { value: 'Jun', label: 'June' },
+  { value: 'Jul', label: 'July' },
+  { value: 'Aug', label: 'August' },
+  { value: 'Sep', label: 'September' },
+  { value: 'Oct', label: 'October' },
+  { value: 'Nov', label: 'November' },
+  { value: 'Dec', label: 'December' }
+  ];
+
+console.log(nameSearch)
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -267,52 +286,64 @@ export default function Orders(props) {
         {/* Render admin table */}
         <>
           <div>
-           
+
             <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              <InputLabel id="demo-select-small-label">Search by Name</InputLabel>
-              <Select
+              {/* <InputLabel id="demo-select-small-label">Search by Name</InputLabel> */}
+              {/* <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 value={nameSearch}
-                onChange={(e) => setNameSearch(e.target.value)}
-                label="Search by Name"
-              >
-                <MenuItem value="">
+                onChange={(e) => setNameSearch(e.value)}
+               // label={nameSearch}
+                isSearchable={true}
+                options={optionList_byname}
+                placeholder="Search by Name"
+              > */}
+               <Select
+                
+                options={optionList_byname}
+                placeholder="Search by Name"
+                value={nameSearch}
+                onChange={(e) => setNameSearch(e.value)}
+                isSearchable={true}
+               
+            />
+                {/* <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {data.map((row) => (
                   <MenuItem value={row.name}>{row.name}</MenuItem>
-                ))}
-              </Select>
+                ))} */}
+              {/* </Select> */}
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              <InputLabel id="demo-select-small-label">Search by Email</InputLabel>
+              {/* <InputLabel id="demo-select-small-label">Search by Email</InputLabel> */}
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 value={emailSearch}
-                onChange={(e) => setEmailSearch(e.target.value)}
+                onChange={(e) => setEmailSearch(e.value)}
                 label="Search by Email"
+                options={optionList_byemail}
+                placeholder="Search by Email"
+                isSearchable={true}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {data.map((row) => (
-                  <MenuItem value={row.email}>{row.email}</MenuItem>
-                ))}
+
               </Select>
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 180, mb: 4 }} size="small">
-              <InputLabel id="demo-select-small-label">Search by Day</InputLabel>
+              {/* <InputLabel id="demo-select-small-label">Search by Day</InputLabel> */}
               <Select
                 labelId="demo-select-small-label"
                 label="Search in Read Information"
                 variant="outlined"
                 value={infoSearch}
-                onChange={(e) => setInfoSearch(e.target.value)}
-
+                onChange={(e) => setInfoSearch(e.value)}
+                options={optionList_month}
+                placeholder="Search by month"
+                isSearchable={true}
               >
-                <MenuItem value="">
+                {/* <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
 
@@ -320,7 +351,7 @@ export default function Orders(props) {
                   <MenuItem key={index + 1} value={`Day ${index + 1}`}>
                     {`Day ${index + 1}`}
                   </MenuItem>
-                ))}
+                ))} */}
 
               </Select>
             </FormControl>
@@ -547,64 +578,5 @@ export default function Orders(props) {
     </React.Fragment>
   );
 
-  //   <React.Fragment>
-  //     <Typography component="h2" variant="h6" color="primary" gutterBottom>
-  //       {props.children}
-  //     </Typography>
-  //     <Typography component="h1" variant="h5" m={2}>
-  //       {data.map((row) => (
-  //         <React.Fragment key={row.id}>
-  //           {row.name}
-  //         </React.Fragment>
-  //       ))}
-  //     </Typography>
-  //     <div style={{ overflowX: 'auto' }}>
-  //     <Table  size="small">
-  //       <TableHead>
-  //         <TableRow>
-  //           {/* <TableCell>Name</TableCell>
-  //           <TableCell>Email</TableCell> */}
-  //           <TableCell sx={{fontSize:20}}>Read Information</TableCell>
-  //           <TableCell></TableCell>
-  //           <TableCell></TableCell>
-  //           <TableCell></TableCell>
-  //           <TableCell></TableCell>
-  //         </TableRow>
-  //       </TableHead>
-  //       <TableBody>
-  //         {data.map((row) => (
-  //           <React.Fragment key={row.id}>
-  //             {/* <TableRow>
-  //               <TableCell>{row.name}</TableCell>
-  //               <TableCell>{row.email}</TableCell>
-
-  //             </TableRow> */}
-  //             {row.readinformation.map((info, index) => (
-  //               <TableRow key={index}>
-  //                 <TableCell>{info.day}</TableCell>
-  //                 <TableCell>{info.date}</TableCell>
-  //                 <TableCell>{info.information}</TableCell>
-  //                 <TableCell>
-  //                   <Tooltip title="Edit">
-  //                     <IconButton color='success' aria-label="add an alarm" onClick={() => handleButtonClick(row)}>
-  //                       <ModeEditIcon />
-  //                     </IconButton>
-  //                   </Tooltip>
-  //                 </TableCell>
-  //                 <TableCell>
-  //                   <Tooltip title="Delete">
-  //                     <IconButton color="error" aria-label="add an alarm" onClick={() => handleButtonClick(row)}>
-  //                       <DeleteIcon />
-  //                     </IconButton>
-  //                   </Tooltip>
-  //                 </TableCell>
-  //               </TableRow>
-  //             ))}
-  //           </React.Fragment>
-  //         ))}
-  //       </TableBody>
-  //     </Table>
-  //     </div>
-  //   </React.Fragment>
-  // );
+  
 }
