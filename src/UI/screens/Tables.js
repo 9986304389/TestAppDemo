@@ -307,7 +307,7 @@ export default function Orders(props) {
         <>
           <div>
 
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, zIndex: 999999 }} size="small">
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, }} size="small">
 
               <Select
                 options={optionList_byname}
@@ -319,7 +319,7 @@ export default function Orders(props) {
               />
 
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 300, mb: 4, zIndex: 999999 }} size="small">
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4,}} size="small">
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
@@ -333,7 +333,7 @@ export default function Orders(props) {
 
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, zIndex: 999999 }} size="small">
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, }} size="small">
               {/* <InputLabel id="demo-select-small-label">Search by Day</InputLabel> */}
               <Select
                 labelId="demo-select-small-label"
