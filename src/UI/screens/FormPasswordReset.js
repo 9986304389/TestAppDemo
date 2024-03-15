@@ -75,7 +75,7 @@ export default function SignIn() {
         }
 
         try {
-            const response = await fetch('https://chbackend.vercel.app/api/resetpassword', {
+            const response = await fetch('https://nlfbackend.vercel.app/api/resetpassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
