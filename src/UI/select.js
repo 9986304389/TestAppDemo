@@ -1057,7 +1057,7 @@ export default function SelectAutoWidth(props) {
         { value: "Day 271,27-Sep,Ecclesiastes 1-4", label: "Day 271,27-Sep,Ecclesiastes 1-4" },
         { value: "Day 272,28-Sep,Ecclesiastes 5-8", label: "Day 272,28-Sep,Ecclesiastes 5-8" },
         { value: "Day 273,29-Sep,Ecclesiastes 9-12", label: "Day 273,29-Sep,Ecclesiastes 9-12" },
-        { value: "Day 274,30-Sep,Song of Solomon 1-4", label: "Day 274,30-Sep,Song of Solomon 1-4" },
+        { value: "Day 274,30-Sep,Song of Solomon 1-8", label: "Day 274,30-Sep,Song of Solomon 1-8" },
         { value: "Day 275,01-Oct,Isaiah 1-3", label: "Day 275,01-Oct,Isaiah 1-3" },
         { value: "Day 276,02-Oct,Isaiah 4-6", label: "Day 276,02-Oct,Isaiah 4-6" },
         { value: "Day 277,03-Oct,Isaiah 7-9", label: "Day 277,03-Oct,Isaiah 7-9" },
