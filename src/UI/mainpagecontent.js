@@ -90,91 +90,91 @@ export default function SignUp(props) {
         study_year:year
       }
       console.log("form_data",form_data)
-      // try {
-      //   setLoading(true);
-      //   const response = await fetch('https://nlfbackend.vercel.app/api/save_form_data', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(form_data),
-      //   });
+      try {
+        setLoading(true);
+        const response = await fetch('https://nlfbackend.vercel.app/api/save_form_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(form_data),
+        });
 
-      //   if (response.ok) {
+        if (response.ok) {
 
-      //     const result = await response.json();
-      //     console.log(result);
-      //     if (result.status) {
-      //       // Set success alert config
-      //       setAlertConfig({
-      //         show: true,
-      //         message: result.message, // Adjust based on your API response structure
-      //         severity: 'success',
-      //       });
-      //       setTimeout(() => {
-      //         setAlertConfig({
-      //           show: false,
-      //           message: '',
-      //           severity: 'success',
-      //         });
-      //       }, 3000);
+          const result = await response.json();
+          console.log(result);
+          if (result.status) {
+            // Set success alert config
+            setAlertConfig({
+              show: true,
+              message: result.message, // Adjust based on your API response structure
+              severity: 'success',
+            });
+            setTimeout(() => {
+              setAlertConfig({
+                show: false,
+                message: '',
+                severity: 'success',
+              });
+            }, 3000);
 
-      //     }
-      //     else {
-      //       // Set failure alert config
-      //       setAlertConfig({
-      //         show: true,
-      //         message: result.message,
-      //         severity: 'error',
-      //       });
-      //       setTimeout(() => {
-      //         setAlertConfig({
-      //           show: false,
-      //           message: '',
-      //           severity: 'success',
-      //         });
-      //       }, 3000);
+          }
+          else {
+            // Set failure alert config
+            setAlertConfig({
+              show: true,
+              message: result.message,
+              severity: 'error',
+            });
+            setTimeout(() => {
+              setAlertConfig({
+                show: false,
+                message: '',
+                severity: 'success',
+              });
+            }, 3000);
 
-      //     }
-      //   } else {
-      //     console.error('Failed to fetch data');
+          }
+        } else {
+          console.error('Failed to fetch data');
 
-      //     // Set failure alert config
-      //     setAlertConfig({
-      //       show: true,
-      //       message: 'API call failed!',
-      //       severity: 'error',
-      //     });
-      //     setTimeout(() => {
-      //       setAlertConfig({
-      //         show: false,
-      //         message: '',
-      //         severity: 'success',
-      //       });
-      //     }, 3000);
+          // Set failure alert config
+          setAlertConfig({
+            show: true,
+            message: 'API call failed!',
+            severity: 'error',
+          });
+          setTimeout(() => {
+            setAlertConfig({
+              show: false,
+              message: '',
+              severity: 'success',
+            });
+          }, 3000);
 
-      //   }
-      // } catch (error) {
-      //   console.error('Error:', error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
 
-      //   // Set error alert config
-      //   setAlertConfig({
-      //     show: true,
-      //     message: 'An error occurred!',
-      //     severity: 'error',
-      //   });
-      //   setTimeout(() => {
-      //     setAlertConfig({
-      //       show: false,
-      //       message: '',
-      //       severity: 'success',
-      //     });
-      //   }, 3000);
-      // }
-      // finally {
-      //   // Set loading back to false when the API call is completed
-      //   setLoading(false);
-      // }
+        // Set error alert config
+        setAlertConfig({
+          show: true,
+          message: 'An error occurred!',
+          severity: 'error',
+        });
+        setTimeout(() => {
+          setAlertConfig({
+            show: false,
+            message: '',
+            severity: 'success',
+          });
+        }, 3000);
+      }
+      finally {
+        // Set loading back to false when the API call is completed
+        setLoading(false);
+      }
     }
   };
 
