@@ -169,11 +169,11 @@ export default function Orders(props) {
     fetchData();
   }, []);
 
-  const handleButtonClick = (rowData) => {
-    // Handle the click event to capture the data from the selected row
-    console.log('Selected Row Data:', rowData);
-    setSelectedRowData(rowData);
-  };
+  // const handleButtonClick = (rowData) => {
+  //   // Handle the click event to capture the data from the selected row
+  //   console.log('Selected Row Data:', rowData);
+  //   setSelectedRowData(rowData);
+  // };
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermbyuser, setSearchTermbyuser] = useState('');
@@ -186,42 +186,83 @@ export default function Orders(props) {
   const [infoSearchmont, setInfoSearchmont] = useState('');
   const [selectDate, setDate] = React.useState('');
   const [selectMont, setMonth] = React.useState(false);
+  const [SearchTerm_year, SetSearchTerm_year] = useState('2024');
+  const [SearchTerm_year_1, SetSearchTerm_year_1] = useState('2024');
+
+  // const filterData = () => {
+  //   return data.map((row) => {
+  //     console.log("kaaaaaaaaa",row)
+  //     const filteredReadInformation = (row?.readinformation).filter(
+  //       (info) =>
+  //         info &&
+  //         info.day &&
+  //         info.date &&
+  //         info.information &&
+  //         typeof info.day === 'string' &&
+  //         typeof info.date === 'string' &&
+  //         typeof info.information === 'string' &&
+  //         info.day.toLowerCase().trim() == (infoSearch_1.toLowerCase().trim()) ||
+  //         info.date.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim()) ||
+  //         info.information.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim())
+  //     );
+
+  //     // Check both conditions for filtering based on name and email
+  //     if (
+  //       row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
+  //       row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
+
+  //     ) {
+
+  //       return {
+  //         ...row,
+  //         readinformation: filteredReadInformation,
+
+  //       };
+  //     } else {
+  //       // If the name or email does not match, return null or an empty object
+  //       // depending on your use case
+  //       return null; // or return {} or return undefined, based on your preference
+  //     }
+  //   })
+  //     // Filter out the elements that didn't match the name and email conditions
+  //     .filter(Boolean); // This will remove null or undefined elements from the array
+  // };
 
   const filterData = () => {
     return data.map((row) => {
-      const filteredReadInformation = (row?.readinformation).filter(
+      console.log("kaaaaaaaaa", row);
 
-        (info) =>
-          info &&
-          info.day &&
-          info.date &&
-          info.information &&
-          typeof info.day === 'string' &&
-          typeof info.date === 'string' &&
-          typeof info.information === 'string' &&
-          info.day.toLowerCase().trim() == (infoSearch_1.toLowerCase().trim()) ||
-          info.date.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim()) ||
-          info.information.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim())
-      );
+      // Get the selected year from the search term
+      let yearSelection = row.study_year;
+      console.log("yearSelection", yearSelection, SearchTerm_year_1);
+      const filteredReadInformation = row?.readinformation.filter((info) => {
+        const infoSearch = infoSearch_1.toLowerCase().trim();
 
-      // Check both conditions for filtering based on name and email
+        const isDayMatch = info.day && typeof info.day === 'string' && info.day.toLowerCase().trim() === infoSearch;
+        const isDateMatch = info.date && typeof info.date === 'string' && info.date.toLowerCase().trim().includes(infoSearch);
+        const isInformationMatch = info.information && typeof info.information === 'string' && info.information.toLowerCase().trim().includes(infoSearch);
+
+        let isYearMatch = yearSelection && yearSelection.toString() === SearchTerm_year_1;
+
+        // Return true only if both year matches and one of the other conditions match
+        return isYearMatch && (isDayMatch || isDateMatch || isInformationMatch);
+      });
+
+      // Check if name and email match the search criteria
       if (
         row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
         row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
       ) {
-
         return {
           ...row,
           readinformation: filteredReadInformation,
-
         };
       } else {
-        // If the name or email does not match, return null or an empty object
-        // depending on your use case
-        return null; // or return {} or return undefined, based on your preference
+        // If name or email doesn't match, return null (to be filtered out later)
+        return null;
       }
     })
-      // Filter out the elements that didn't match the name and email conditions
+      // Filter out rows where the name or email didn't match
       .filter(Boolean); // This will remove null or undefined elements from the array
   };
 
@@ -258,6 +299,11 @@ export default function Orders(props) {
     { value: 'Dec', label: 'December' }
   ];
 
+  const optionList_year = [
+    { value: '2024', label: '2024' },
+    { value: '2025', label: '2025' },
+
+  ];
   function handleSelect_byname(e) {
     setNameSearch(e)
     setSearchTerm_1(e.value)
@@ -279,13 +325,17 @@ export default function Orders(props) {
     setSearchTermbyuser(e.value)
   }
 
+  function select_year(e) {
+    SetSearchTerm_year(e)
+    SetSearchTerm_year_1(e.value)
+  }
+
   const clearSelection = () => {
     setSearchTerm(null);
   }
 
   const filteredData = filterData();
 
-  console.log(filteredData)
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -310,6 +360,17 @@ export default function Orders(props) {
             <FormControl sx={{ m: 1, minWidth: 180, mb: 4, }} size="small">
 
               <Select
+                options={optionList_year}
+                placeholder="Search by Year"
+                value={SearchTerm_year}
+                onChange={select_year}
+                isSearchable={true}
+              />
+            </FormControl>
+
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, }} size="small">
+
+              <Select
                 options={optionList_byname}
                 placeholder="Search by Name"
                 value={nameSearch}
@@ -319,7 +380,7 @@ export default function Orders(props) {
               />
 
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 180, mb: 4,}} size="small">
+            <FormControl sx={{ m: 1, minWidth: 180, mb: 4, }} size="small">
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
@@ -463,25 +524,50 @@ export default function Orders(props) {
         <div style={{ overflowX: 'auto', minHeight: '500px' }}>
 
           <div style={{ marginBottom: 20, marginTop: 8, width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <div style={{ width: "100%", padding: 10 ,zIndex: 999999}}>
-              <Select
-                labelId="demo-select-small-label"
-                label="Search in Read Information"
-                variant="outlined"
-                value={searchTerm}
-                onChange={handleSelect_month_byuser}
-                options={optionList_month}
-                placeholder="Search by month"
-                isSearchable={true}
-                sx={{ fontSize: 20, paddingTop: 10 }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      minHeight: '200px' // Set the minimum height for options
+
+            <div style={{ display: "flex", flexDirection: 'row', width: "100%" }}>
+
+              <div style={{ width: "30%", padding: 10, zIndex: 999999 }}>
+                <Select
+                  labelId="demo-select-small-label"
+                  label="Search in Read Information"
+                  variant="outlined"
+                  value={SearchTerm_year}
+                  onChange={select_year}
+                  options={optionList_year}
+                  placeholder="select year"
+                  isSearchable={true}
+                  sx={{ fontSize: 20, paddingTop: 10 }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        minHeight: '200px', // Set the minimum height for options
+                        minWidth: '20px'
+                      }
                     }
-                  }
-                }}
-              />
+                  }}
+                />
+              </div>
+              <div style={{ width: "100%", padding: 10, zIndex: 999999 }}>
+                <Select
+                  labelId="demo-select-small-label"
+                  label="Search in Read Information"
+                  variant="outlined"
+                  value={searchTerm}
+                  onChange={handleSelect_month_byuser}
+                  options={optionList_month}
+                  placeholder="Search by month"
+                  isSearchable={true}
+                  sx={{ fontSize: 20, paddingTop: 10 }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        minHeight: '200px' // Set the minimum height for options
+                      }
+                    }
+                  }}
+                />
+              </div>
             </div>
             <div style={{ width: "10%", marginTop: 8 }}>
               {searchTerm && (
@@ -508,19 +594,15 @@ export default function Orders(props) {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontSize: 20 }}>Read Information</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell>Status</TableCell>
-                {/* <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell> */}
               </TableRow>
             </TableHead>
-            <TableBody>
+
+            <TableBody sx={{ height: 20 }}>
               {data.map((row) => (
                 <React.Fragment key={row.id}>
                   {row.readinformation
                     .filter((info) =>
-                      info.date.toLowerCase().includes(searchTermbyuser.toLowerCase())
+                      info.date.toLowerCase().includes(searchTermbyuser.toLowerCase()) && row.study_year == SearchTerm_year_1
                     )
                     .map((info, index) => (
                       <TableRow key={index}>
