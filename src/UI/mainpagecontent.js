@@ -81,7 +81,8 @@ export default function SignUp(props) {
         day: day.trim(),
         date: date.trim(),
         information: information.trim(),
-        status: dataToSend
+        status: dataToSend,
+        study_year:year
       }
       let form_data = {
         name: name,
@@ -103,7 +104,6 @@ export default function SignUp(props) {
         if (response.ok) {
 
           const result = await response.json();
-          console.log(result);
           if (result.status) {
             // Set success alert config
             setAlertConfig({

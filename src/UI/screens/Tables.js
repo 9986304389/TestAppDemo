@@ -189,82 +189,104 @@ export default function Orders(props) {
   const [SearchTerm_year, SetSearchTerm_year] = useState('2024');
   const [SearchTerm_year_1, SetSearchTerm_year_1] = useState('2024');
 
-  // const filterData = () => {
-  //   return data.map((row) => {
-  //     console.log("kaaaaaaaaa",row)
-  //     const filteredReadInformation = (row?.readinformation).filter(
-  //       (info) =>
-  //         info &&
-  //         info.day &&
-  //         info.date &&
-  //         info.information &&
-  //         typeof info.day === 'string' &&
-  //         typeof info.date === 'string' &&
-  //         typeof info.information === 'string' &&
-  //         info.day.toLowerCase().trim() == (infoSearch_1.toLowerCase().trim()) ||
-  //         info.date.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim()) ||
-  //         info.information.toLowerCase().trim().includes(infoSearch_1.toLowerCase().trim())
-  //     );
-
-  //     // Check both conditions for filtering based on name and email
-  //     if (
-  //       row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
-  //       row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
-
-  //     ) {
-
-  //       return {
-  //         ...row,
-  //         readinformation: filteredReadInformation,
-
-  //       };
-  //     } else {
-  //       // If the name or email does not match, return null or an empty object
-  //       // depending on your use case
-  //       return null; // or return {} or return undefined, based on your preference
-  //     }
-  //   })
-  //     // Filter out the elements that didn't match the name and email conditions
-  //     .filter(Boolean); // This will remove null or undefined elements from the array
-  // };
-
   const filterData = () => {
     return data.map((row) => {
-      console.log("kaaaaaaaaa", row);
-
       // Get the selected year from the search term
-      let yearSelection = row.study_year;
-      console.log("yearSelection", yearSelection, SearchTerm_year_1);
+      const yearSelection = row.study_year; // The study_year in each row
+      console.log("Row study year:", yearSelection, "Search term year:", SearchTerm_year_1);
+
       const filteredReadInformation = row?.readinformation.filter((info) => {
         const infoSearch = infoSearch_1.toLowerCase().trim();
+        const SearchTerm_year = SearchTerm_year_1.toLowerCase().trim();
 
-        const isDayMatch = info.day && typeof info.day === 'string' && info.day.toLowerCase().trim() === infoSearch;
-        const isDateMatch = info.date && typeof info.date === 'string' && info.date.toLowerCase().trim().includes(infoSearch);
-        const isInformationMatch = info.information && typeof info.information === 'string' && info.information.toLowerCase().trim().includes(infoSearch);
+        const isDayMatch = info.day && info.day.toLowerCase().trim() === infoSearch;
+        const isDateMatch = info.date && info.date.toLowerCase().trim().includes(infoSearch);
+        const isInformationMatch = info.information && info.information.toLowerCase().trim().includes(infoSearch);
 
-        let isYearMatch = yearSelection && yearSelection.toString() === SearchTerm_year_1;
+        let isYearMatch = false; // Default to false
 
-        // Return true only if both year matches and one of the other conditions match
-        return isYearMatch && (isDayMatch || isDateMatch || isInformationMatch);
+        // Check year based on SearchTerm_year_1
+        if (SearchTerm_year === '2024') {
+          // If searching for 2024, include:
+          // 1. Records that don't have study_year (no "study_year" field)
+          // 2. Records with study_year === '2024'
+          isYearMatch = !info.study_year || info.study_year === '2024';
+        } else if (SearchTerm_year === '2025') {
+          // If searching for 2025, include only records with study_year === '2025'
+          isYearMatch = info.study_year === '2025';
+        }
+
+        console.log(`Info: ${info.day} ${info.date} ${info.information} - Year Match: ${isYearMatch}, Day Match: ${isDayMatch}, Date Match: ${isDateMatch}, Information Match: ${isInformationMatch}`);
+
+        // Return true if any of the conditions match (day, date, information) and study year match
+        return (isDayMatch || isDateMatch || isInformationMatch) && isYearMatch;
       });
 
-      // Check if name and email match the search criteria
+
+      // Check both conditions for filtering based on name and email
       if (
         row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
         row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
+
       ) {
+
         return {
           ...row,
           readinformation: filteredReadInformation,
+
         };
       } else {
-        // If name or email doesn't match, return null (to be filtered out later)
-        return null;
+        // If the name or email does not match, return null or an empty object
+        // depending on your use case
+        return null; // or return {} or return undefined, based on your preference
       }
     })
-      // Filter out rows where the name or email didn't match
+      // Filter out the elements that didn't match the name and email conditions
       .filter(Boolean); // This will remove null or undefined elements from the array
   };
+
+  // const filterData = () => {
+  //   return data.map((row) => {
+
+  //     // Get the selected year from the search term
+  //     let yearSelection = row.study_year;
+  //     // console.log("yearSelection", yearSelection, SearchTerm_year_1);
+  //     const filteredReadInformation = row?.readinformation.filter((info) => {
+  //       const infoSearch = infoSearch_1.toLowerCase().trim();
+  //       console.log("infoSearch",infoSearch)
+  //       let SearchTerm_year = SearchTerm_year_1.toLowerCase().trim();
+
+  //       const isDayMatch = info.day && typeof info.day === 'string' && info.day.toLowerCase().trim() === infoSearch;
+  //       const isDateMatch = info.date && typeof info.date === 'string' && info.date.toLowerCase().trim().includes(infoSearch);
+  //       const isInformationMatch = info.information && typeof info.information === 'string' && info.information.toLowerCase().trim().includes(infoSearch);
+  //       let yearSelection = info.study_year && typeof info.information === 'string' && info.information.toLowerCase().trim().includes(SearchTerm_year);
+
+  //       if(SearchTerm_year=='2024'){
+  //         yearSelection=true
+  //       }
+  //       console.log('info.information ',SearchTerm_year)
+  //       // console.log("yearSelection",yearSelection,SearchTerm_year,isDayMatch,isDateMatch,isInformationMatch)
+  //       // Return true only if any of the conditions match (day, date, information, or study year)
+  //       return   yearSelection &&(isInformationMatch || isDayMatch || isDateMatch);
+  //     });
+
+  //     // Check if name and email match the search criteria
+  //     if (
+  //       row.name.toLowerCase().includes(searchTerm_1.toLowerCase()) &&
+  //       row.email.toLowerCase().includes(emailSearch_1.toLowerCase())
+  //     ) {
+  //       return {
+  //         ...row,
+  //         readinformation: filteredReadInformation,
+  //       };
+  //     } else {
+  //       // If name or email doesn't match, return null (to be filtered out later)
+  //       return null;
+  //     }
+  //   })
+  //     // Filter out rows where the name or email didn't match
+  //     .filter(Boolean); // This will remove null or undefined elements from the array
+  // };
 
 
   const handleRefreshClick = () => {
@@ -332,10 +354,12 @@ export default function Orders(props) {
 
   const clearSelection = () => {
     setSearchTerm(null);
+
   }
 
   const filteredData = filterData();
 
+  console.log("searchTermbyuser", searchTermbyuser)
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -462,13 +486,14 @@ export default function Orders(props) {
                                   <TableCell>Day</TableCell>
                                   <TableCell>Date</TableCell>
                                   <TableCell>Information</TableCell>
+
                                   <TableCell>Status</TableCell>
-                                  {/* <TableCell>Edit</TableCell>
-                              <TableCell>Delete</TableCell> */}
+                                  <TableCell>Year</TableCell>
+                            
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {console.log(row.readinformation.length)}
+                                {console.log(row.readinformation)}
                                 {row.readinformation.length != 0 && row.readinformation.map((info, index) => (
                                   <TableRow key={index}>
                                     <TableCell>{info.day}</TableCell>
@@ -483,28 +508,7 @@ export default function Orders(props) {
                                         {info.status === 1 ? 'Done' : 'Not Done'}
                                       </span>
                                     </TableCell>
-                                    {/* <TableCell>
-                                  <Tooltip title="Edit">
-                                    <IconButton
-                                      color="success"
-                                      aria-label="edit"
-                                      onClick={() => handleButtonClick(row)}
-                                    >
-                                      <ModeEditIcon />
-                                    </IconButton>
-                                  </Tooltip>
-                                </TableCell>
-                                <TableCell>
-                                  <Tooltip title="Delete">
-                                    <IconButton
-                                      color="error"
-                                      aria-label="delete"
-                                      onClick={() => handleButtonClick(row)}
-                                    >
-                                      <DeleteIcon />
-                                    </IconButton>
-                                  </Tooltip>
-                                </TableCell> */}
+                                    <TableCell>{info?.study_year||'2024'}</TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -593,59 +597,59 @@ export default function Orders(props) {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontSize: 20 }}>Read Information</TableCell>
+                {/* <TableCell sx={{ fontSize: 20 }}>Read Information</TableCell> */}
+                <TableCell>Day</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Information</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Year</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody sx={{ height: 20 }}>
-              {data.map((row) => (
-                <React.Fragment key={row.id}>
-                  {row.readinformation
-                    .filter((info) =>
-                      info.date.toLowerCase().includes(searchTermbyuser.toLowerCase()) && row.study_year == SearchTerm_year_1
-                    )
-                    .map((info, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{info.day}</TableCell>
-                        <TableCell>{info.date}</TableCell>
-                        <TableCell>{info.information}</TableCell>
-                        <TableCell>
-                          <span
-                            style={{
-                              color: info.status === 1 ? 'green' : 'red',
-                            }}
-                          >
-                            {info.status === 1 ? 'Done' : 'Not Done'}
-                          </span>
+  {data.map((row) => (
+    <React.Fragment key={row.id}>
+      {row.readinformation
+        .filter((info) => {
+          const searchTerm = searchTermbyuser.toLowerCase().trim();
+          const searchTermYear = SearchTerm_year_1.toLowerCase().trim(); // Assuming this contains the year from search input
 
-                        </TableCell>
-                        {/* <TableCell>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              color="success"
-                              aria-label="edit"
-                              onClick={() => handleButtonClick(row)}
-                            >
-                              <ModeEditIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell>
-                          <Tooltip title="Delete">
-                            <IconButton
-                              color="error"
-                              aria-label="delete"
-                              onClick={() => handleButtonClick(row)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell> */}
-                      </TableRow>
-                    ))}
-                </React.Fragment>
-              ))}
-            </TableBody>
+          const isMonthMatch = info.date && info.date.toLowerCase().includes(searchTerm); // Filter by month (date)
+          let isYearMatch = false;
+
+          // Check if the year matches the search term
+          if (searchTermYear === '2024') {
+            // For 2024, include records that don't have study_year or have study_year 2024
+            isYearMatch = !info.study_year || info.study_year === '2024';
+          } else if (searchTermYear === '2025') {
+            // For 2025, include only records with study_year === '2025'
+            isYearMatch = info.study_year === '2025';
+          }
+
+          // Combine the conditions (both year and month)
+          return isYearMatch && isMonthMatch;
+        })
+        .map((info, index) => (
+          <TableRow key={index}>
+            <TableCell>{info.day}</TableCell>
+            <TableCell>{info.date}</TableCell>
+            <TableCell>{info.information}</TableCell>
+            <TableCell>
+              <span
+                style={{
+                  color: info.status === 1 ? 'green' : 'red',
+                }}
+              >
+                {info.status === 1 ? 'Done' : 'Not Done'}
+              </span>
+            </TableCell>
+            <TableCell>{info?.study_year || '2024'}</TableCell>
+          </TableRow>
+        ))}
+    </React.Fragment>
+  ))}
+</TableBody>
+
           </Table>
         </div>
       )
