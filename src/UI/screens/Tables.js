@@ -118,7 +118,7 @@ export default function Orders(props) {
           // Assuming result.rows is an array of objects
           if (result.result) {
             const formattedResult = result.result.map(item => {
-              const readInformationArray = item.readinformation.map(info => JSON.parse(info));
+              const readInformationArray = item.readinformation.map(info => (info));
               return { ...item, readinformation: readInformationArray };
             });
 
