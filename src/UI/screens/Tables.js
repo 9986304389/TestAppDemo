@@ -28,8 +28,8 @@ import Select from "react-select";
 // import Datepicker from './Datepicker';
 import CircularProgress from '@mui/material/CircularProgress';
 const generateDateOptions = () => {
-  const startDate = new Date('2024-01-01');
-  const endDate = new Date('2024-12-31');
+  const startDate = new Date('2026-01-01');
+  const endDate = new Date('2026-12-31');
   const dateOptions = [];
 
   for (let currentDate = startDate; currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
@@ -186,8 +186,8 @@ export default function Orders(props) {
   const [infoSearchmont, setInfoSearchmont] = useState('');
   const [selectDate, setDate] = React.useState('');
   const [selectMont, setMonth] = React.useState(false);
-  const [SearchTerm_year, SetSearchTerm_year] = useState('2024');
-  const [SearchTerm_year_1, SetSearchTerm_year_1] = useState('2024');
+  const [SearchTerm_year, SetSearchTerm_year] = useState('2026');
+  const [SearchTerm_year_1, SetSearchTerm_year_1] = useState('2026');
 
   const filterData = () => {
     return data.map((row) => {
@@ -206,15 +206,16 @@ export default function Orders(props) {
         let isYearMatch = false; // Default to false
 
         // Check year based on SearchTerm_year_1
-        if (SearchTerm_year === '2024') {
-          // If searching for 2024, include:
+        if (SearchTerm_year === '2026') {
+          // If searching for 2026, include:
           // 1. Records that don't have study_year (no "study_year" field)
-          // 2. Records with study_year === '2024'
-          isYearMatch = !info.study_year || info.study_year === '2024';
-        } else if (SearchTerm_year === '2025') {
-          // If searching for 2025, include only records with study_year === '2025'
-          isYearMatch = info.study_year === '2025';
-        }
+          // 2. Records with study_year === '2026'
+          isYearMatch = !info.study_year || info.study_year === '2026';
+        } 
+        // else if (SearchTerm_year === '2025') {
+        //   // If searching for 2025, include only records with study_year === '2025'
+        //   isYearMatch = info.study_year === '2025';
+        // }
 
         console.log(`Info: ${info.day} ${info.date} ${info.information} - Year Match: ${isYearMatch}, Day Match: ${isDayMatch}, Date Match: ${isDateMatch}, Information Match: ${isInformationMatch}`);
 
@@ -322,8 +323,8 @@ export default function Orders(props) {
   ];
 
   const optionList_year = [
-    { value: '2024', label: '2024' },
-    { value: '2025', label: '2025' },
+    { value: '2026', label: '2026' },
+  //  { value: '2025', label: '2025' },
 
   ];
   function handleSelect_byname(e) {
@@ -508,7 +509,7 @@ export default function Orders(props) {
                                         {info.status === 1 ? 'Done' : 'Not Done'}
                                       </span>
                                     </TableCell>
-                                    <TableCell>{info?.study_year||'2024'}</TableCell>
+                                    <TableCell>{info?.study_year||'2026'}</TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -618,13 +619,14 @@ export default function Orders(props) {
           let isYearMatch = false;
 
           // Check if the year matches the search term
-          if (searchTermYear === '2024') {
+          if (searchTermYear === '2026') {
             // For 2024, include records that don't have study_year or have study_year 2024
-            isYearMatch = !info.study_year || info.study_year === '2024';
-          } else if (searchTermYear === '2025') {
-            // For 2025, include only records with study_year === '2025'
-            isYearMatch = info.study_year === '2025';
-          }
+            isYearMatch = !info.study_year || info.study_year === '2026';
+          } 
+          // else if (searchTermYear === '2025') {
+          //   // For 2025, include only records with study_year === '2025'
+          //   isYearMatch = info.study_year === '2025';
+          // }
 
           // Combine the conditions (both year and month)
           return isYearMatch && isMonthMatch;
@@ -643,7 +645,7 @@ export default function Orders(props) {
                 {info.status === 1 ? 'Done' : 'Not Done'}
               </span>
             </TableCell>
-            <TableCell>{info?.study_year || '2024'}</TableCell>
+            <TableCell>{info?.study_year || '2026'}</TableCell>
           </TableRow>
         ))}
     </React.Fragment>
