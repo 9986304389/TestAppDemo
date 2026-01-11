@@ -20,7 +20,7 @@ export default function SelectAutoWidth(props) {
 
     const optionList = [
 
-       [
+       
   { value: "Day 1,01-Jan,Matthew 1-3", label: "Day 1,01-Jan,Matthew 1-3" },
   { value: "Day 2,02-Jan,Matthew 4-6", label: "Day 2,02-Jan,Matthew 4-6" },
   { value: "Day 3,03-Jan,Matthew 7-9", label: "Day 3,03-Jan,Matthew 7-9" },
@@ -88,7 +88,7 @@ export default function SelectAutoWidth(props) {
         { value: "Day 365,30-Dec,Holiday /Meditate", label: "Day 365,30-Dec,Holiday /Meditate" },
         { value: "Day 366,31-Dec,Holiday /Meditate", label: "Day 366,31-Dec,Holiday /Meditate" },
 
-    ];
+    ]
 
 
 
